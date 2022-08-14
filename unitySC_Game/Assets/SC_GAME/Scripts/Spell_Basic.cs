@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Spell_Basic : MonoBehaviour
 {
+    //public SpellMenager spellmenager;
     public AudioMenager audiomenager;
     public GameObject vfx;
     public float MaxLifeDuration;
@@ -11,16 +12,17 @@ public class Spell_Basic : MonoBehaviour
 
     void Start()
     {
+        //spellmenager = GameObject.Find("_GAME").GetComponent<SpellMenager>();
         audiomenager = GameObject.Find("_GAME").GetComponent<AudioMenager>();
         audiomenager.AudioAtPosition(0, transform.position);
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        
-        foreach (ContactPoint contact in collision.contacts)
+        if (collision.gameObject.tag == "Destructable")
         {
-            Debug.DrawRay(contact.point, contact.normal, Color.white);
+            audiomenager.AudioAtPosition(2, transform.position);
+            Destroy(collision.gameObject);
         }
 
         if(vfx)

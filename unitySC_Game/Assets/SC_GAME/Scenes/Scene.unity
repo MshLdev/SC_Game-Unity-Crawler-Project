@@ -3999,6 +3999,8 @@ MonoBehaviour:
   audioClips:
   - {fileID: 8300000, guid: d165af576432fd643a36bfb93fc74fbb, type: 3}
   - {fileID: 8300000, guid: 8dd155a2be8f34342bd1e3e03fa8ba42, type: 3}
+  - {fileID: 8300000, guid: 5a2fc4a66bf237642b1bf50591c8a2c8, type: 3}
+  - {fileID: 8300000, guid: 06f85c70fedef334bb228e007582f0c8, type: 3}
   AudioPrefab: {fileID: 2291644139758227873, guid: ef1a7ee947bab6a47b2e8870e1c238ac, type: 3}
 --- !u!1001 &1307533526
 PrefabInstance:
