@@ -6,11 +6,16 @@ public class SpellCasting : MonoBehaviour
 {
     GameObject playerCamera;
     SpellMenager SM;
+    Hero hero;
+
+    float spellcost = -12.5f;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        hero = GameObject.Find("_GAME").GetComponent<Hero>();
+
         playerCamera = GameObject.Find("Player_Camera");
         SM = GameObject.Find("_GAME").GetComponent<SpellMenager>();
     }
@@ -18,12 +23,13 @@ public class SpellCasting : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Mouse0))
+        if(Input.GetKeyDown(KeyCode.Mouse0) && hero.mana > spellcost*-1)
             castSpell();
     }
 
     void castSpell()
     {
+        hero.addToBars(2, spellcost);
         GameObject SpellInstation = Instantiate(SM.SpellBook[SM.currentSpellId], playerCamera.transform.position + playerCamera.transform.forward, Quaternion.identity);
         SpellInstation.GetComponent<Rigidbody>().AddForce(playerCamera.transform.forward * 500f);
     }
