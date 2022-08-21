@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+
 
 public class Hero : MonoBehaviour
 {
@@ -19,39 +19,18 @@ public class Hero : MonoBehaviour
 
     float regColldown = 0;
     
-
-    GameObject UI_Object;
-    GameObject heroArms;
+    UI_Interface uiinterface;
 
     void Start()
     {
-        UI_Object = GameObject.Find("UI_Canvas");
-        heroArms = GameObject.Find("Arms_Mesh");
-
-        updateBars();
+        uiinterface = GameObject.Find("_GAME").GetComponent<UI_Interface>();
+        uiinterface.updateBars(mana, maxmana, health, maxhealth);
     }
 
     void Update()
     {
         if(health < maxhealth || mana < maxmana)
             regen();
-    }
-
-    void updateBars()
-    {
-        float mscalefactor = (mana/maxmana);
-        float hscalefactor = (health/maxhealth);
-
-        ////ABSYŚ NIE PSOĆ TUTAJ (ʘ‿ʘ)
-        UI_Object.transform.GetChild(2).GetChild(0).GetComponent<RectTransform>().localScale = new Vector3(mscalefactor, 1f, 1f);   //1 to jes HealthBar, kcemy od jego childa 'fill'
-        UI_Object.transform.GetChild(2).GetChild(1).GetComponent<Text>().text = $"{(int)mana}/{(int)maxmana}";
-
-        UI_Object.transform.GetChild(1).GetChild(0).GetComponent<RectTransform>().localScale = new Vector3(hscalefactor, 1f, 1f); 
-        UI_Object.transform.GetChild(1).GetChild(1).GetComponent<Text>().text = $"{(int)health}/{(int)maxhealth}";
-
-
-        //Update also hands
-        heroArms.GetComponent<Renderer>().material.SetFloat("MaskGlow", 10f * mscalefactor);
     }
 
     void regen()
@@ -66,7 +45,7 @@ public class Hero : MonoBehaviour
                 health = maxhealth;
         
         regColldown = 0f;
-        updateBars();
+        uiinterface.updateBars(mana, maxmana, health, maxhealth);
         }
         regColldown += Time.deltaTime;
     }
@@ -84,7 +63,7 @@ public class Hero : MonoBehaviour
             default:
                 break;
         }
-        updateBars();
+        uiinterface.updateBars(mana, maxmana, health, maxhealth);
     }
 
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class SpellCasting : MonoBehaviour
 {
     GameObject playerCamera;
-    SpellMenager SM;
+    UI_Interface SM;
     Hero hero;
 
     float spellcost = -12.5f;
@@ -17,13 +17,13 @@ public class SpellCasting : MonoBehaviour
         hero = GameObject.Find("_GAME").GetComponent<Hero>();
 
         playerCamera = GameObject.Find("Player_Camera");
-        SM = GameObject.Find("_GAME").GetComponent<SpellMenager>();
+        SM = GameObject.Find("_GAME").GetComponent<UI_Interface>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Mouse0) && hero.mana > spellcost*-1)
+        if(Input.GetKeyDown(KeyCode.Mouse0) && hero.mana > spellcost*-1 && !Cursor.visible)
             castSpell();
     }
 

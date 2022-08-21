@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Spell_Basic : MonoBehaviour
 {
-    //public SpellMenager spellmenager;
     public AudioMenager audiomenager;
     public GameObject vfx;
     public float MaxLifeDuration;
@@ -12,7 +11,6 @@ public class Spell_Basic : MonoBehaviour
 
     void Start()
     {
-        //spellmenager = GameObject.Find("_GAME").GetComponent<SpellMenager>();
         audiomenager = GameObject.Find("_GAME").GetComponent<AudioMenager>();
         audiomenager.AudioAtPosition(0, transform.position);
     }
@@ -33,6 +31,5 @@ public class Spell_Basic : MonoBehaviour
         }
             
         Destroy(gameObject);
-        //if (collision.relativeVelocity.magnitude > 2)
     }
 }
