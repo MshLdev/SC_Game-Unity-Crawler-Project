@@ -824,7 +824,7 @@
         "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
         "m_Guid": ""
     },
-    "m_DefaultType": 0
+    "m_DefaultType": 3
 }
 
 {
@@ -1213,7 +1213,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "36c8031fd06c4c7596c0601cb153d0ed",
     "m_Id": 0,
-    "m_DisplayName": "Float",
+    "m_DisplayName": "AlbedoStrengh",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",

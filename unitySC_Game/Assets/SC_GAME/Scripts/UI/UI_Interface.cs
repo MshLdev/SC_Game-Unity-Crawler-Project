@@ -40,6 +40,11 @@ public class UI_Interface : MonoBehaviour
         float mscalefactor = (mana/maxmana);
         float hscalefactor = (health/maxhealth);
 
+        ///TO JEST DO WYJEBANIA REEEEEEEEE
+        ///REEEEEEEEEEEEEEEEEEEEe (╯°□°）╯︵ ┻━┻
+        if(!UI_Object)
+            Start();
+
         ////ABSYŚ NIE PSOĆ TUTAJ (ʘ‿ʘ)
         UI_Object.transform.GetChild(1).GetChild(0).GetComponent<RectTransform>().localScale = new Vector3(mscalefactor, 1f, 1f);   //1 to jes HealthBar, kcemy od jego childa 'fill'
         UI_Object.transform.GetChild(1).GetChild(1).GetComponent<Text>().text = $"{(int)mana}/{(int)maxmana}";
