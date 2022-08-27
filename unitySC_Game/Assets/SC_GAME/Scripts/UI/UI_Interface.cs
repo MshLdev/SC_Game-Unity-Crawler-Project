@@ -59,7 +59,7 @@ public class UI_Interface : MonoBehaviour
 
     void pickSpell(int slotIndex)
     {   
-        audioM.AudioAtPlayer(3);
+        audioM.AudioAtPlayer(AudioMenager.clips.ui_select);
         //Debug.Log($"picked spell number{slotIndex}");
         SpellBar_Hook.transform.GetChild(currentSlotid).GetComponent<Image>().color = new Color32(75, 75, 75, 255);
         SpellBar_Hook.transform.GetChild(slotIndex).GetComponent<Image>().color = Color.green;

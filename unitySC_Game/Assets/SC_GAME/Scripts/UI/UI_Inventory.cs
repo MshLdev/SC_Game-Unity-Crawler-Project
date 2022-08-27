@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 
 
@@ -29,7 +30,7 @@ public class UI_Inventory : MonoBehaviour
     {
         ui_inv = GameObject.Find("UI_Inventory");
         audioM = GameObject.Find("_GAME").GetComponent<AudioMenager>();
-        audioM.AudioAtPlayer(5);
+        audioM.AudioAtPlayer(AudioMenager.clips.ui_close);
 
         InitSlots(numberOfColumns, numberOfRows);
         switchCursor();
@@ -53,6 +54,15 @@ public class UI_Inventory : MonoBehaviour
                 GameObject newSlot = GameObject.Instantiate(ui_invSlot, Vector3.zero, Quaternion.identity, ui_inv.transform.GetChild(3).transform);
                 newSlot.GetComponent<RectTransform>().localPosition = slotStartVector + new Vector3((slotSize+RowsMargin) * j, (slotSize+ColumnsMargin) * i * -1, 0);
                 newSlot.GetComponent<RectTransform>().sizeDelta = new Vector2(slotSize, slotSize);
+
+                /////AUDIO (SKOPIOWANE PROSTO Z DOKUMENTACJI, TROCHE DZIWNE UGUŁEM)
+                EventTrigger trigger = newSlot.GetComponent<EventTrigger>();
+                EventTrigger.Entry entry = new EventTrigger.Entry();
+                entry.eventID = EventTriggerType.PointerEnter;
+                entry.callback.AddListener( (eventData) => { audioM.AudioAtPlayer(AudioMenager.clips.ui_hover); } );
+                trigger.triggers.Add(entry);
+
+                ////
             }
         }
     }
@@ -65,13 +75,13 @@ public class UI_Inventory : MonoBehaviour
         if(Cursor.visible)
         {
             Cursor.lockState = CursorLockMode.None;
-            audioM.AudioAtPlayer(4);
+            audioM.AudioAtPlayer(AudioMenager.clips.ui_close);
         }
             
         else
         {
             Cursor.lockState = CursorLockMode.Locked; 
-            audioM.AudioAtPlayer(4);
+            audioM.AudioAtPlayer(AudioMenager.clips.ui_close);
         }
             
     }

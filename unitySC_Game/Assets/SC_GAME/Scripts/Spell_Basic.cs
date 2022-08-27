@@ -4,29 +4,29 @@ using UnityEngine;
 
 public class Spell_Basic : MonoBehaviour
 {
-    public AudioMenager audiomenager;
+    public AudioMenager audioM;
     public GameObject vfx;
     public float MaxLifeDuration;
     public float Damage;
 
     void Start()
     {
-        audiomenager = GameObject.Find("_GAME").GetComponent<AudioMenager>();
-        audiomenager.AudioAtPosition(0, transform.position);
+        audioM = GameObject.Find("_GAME").GetComponent<AudioMenager>();
+        audioM.AudioAtPosition(0, transform.position);
     }
 
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Destructable")
         {
-            audiomenager.AudioAtPosition(2, transform.position);
+            audioM.AudioAtPosition(AudioMenager.clips.damageWood, transform.position);
             Destroy(collision.gameObject);
         }
 
         if(vfx)
         {
             GameObject vfxInstantion = Instantiate(vfx, transform.position, Quaternion.identity);
-            audiomenager.AudioAtPosition(1, transform.position);
+            audioM.AudioAtPosition(AudioMenager.clips.fireCrack, transform.position);
             Destroy(vfxInstantion, 5.0f);
         }
             
