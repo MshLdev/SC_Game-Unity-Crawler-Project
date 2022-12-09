@@ -23,7 +23,7 @@ Material:
   m_Name: Roach
   m_Shader: {fileID: -6465566751694194690, guid: 2bc2b978b425d3147a144c14efaa4919, type: 3}
   m_ShaderKeywords: 
-  m_LightmapFlags: 4
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -101,10 +101,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_2ff31db9006148469c8bcf0faa226787: 1.3
-    - Vector1_6451b61af59e4fa9b4d4a52fa2fb2703: 1.89
-    - Vector1_716614351b1941fa90f80ebd0f49a212: 2.31
-    - Vector1_8790993ed97c4b1d91b8b0c0efa8f39e: 71.2
+    - Vector1_2ff31db9006148469c8bcf0faa226787: 1.25
+    - Vector1_6451b61af59e4fa9b4d4a52fa2fb2703: -8.13
+    - Vector1_716614351b1941fa90f80ebd0f49a212: 2.51
+    - Vector1_8790993ed97c4b1d91b8b0c0efa8f39e: 72.23
     - Vector1_a819bdf968284331b9a4c5caf399c6b3: 0.76
     - _AlphaClip: 0
     - _Blend: 0
@@ -117,6 +117,7 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _EnvironmentReflections: 1
+    - _EyeGlow: 71.2
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
@@ -133,9 +134,10 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - Color_07bde8fa28af42f495d64b5172ad2698: {r: 0.5660378, g: 0.0387012, b: 0, a: 0}
+    - Color_07bde8fa28af42f495d64b5172ad2698: {r: 0.30955854, g: 0.46979675, b: 0.8773585, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _EyeColor: {r: 0.10065857, g: 0.25675547, b: 0.6132076, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []

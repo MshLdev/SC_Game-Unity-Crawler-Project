@@ -11,16 +11,16 @@ public class AudioMenager : MonoBehaviour
 
     public enum clips
     {
-      fireBurst = 0,
-      fireCrack = 1,
-      fireTorch = 2,
+      fireBurst   = 0,
+      fireCrack   = 1,
+      fireTorch   = 2,
       ///////////////////
-      damageWood = 3,
-      lvSwitch = 4,
+      damageWood  = 3,
+      lvSwitch    = 4,
       ///////////////////
-      ui_select = 5,
-      ui_close = 6, 
-      ui_hover = 7,
+      ui_select   = 5,
+      ui_close    = 6, 
+      ui_hover    = 7,
     };
 
     void Start() 

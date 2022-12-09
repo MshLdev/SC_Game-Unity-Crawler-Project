@@ -13,9 +13,6 @@
             "m_Id": "ad3e52e34590484aa42545eb2029699b"
         },
         {
-            "m_Id": "6451b61af59e4fa9b4d4a52fa2fb2703"
-        },
-        {
             "m_Id": "8790993ed97c4b1d91b8b0c0efa8f39e"
         },
         {
@@ -685,7 +682,7 @@
     },
     "m_Name": "EyeColor",
     "m_DefaultReferenceName": "Color_07bde8fa28af42f495d64b5172ad2698",
-    "m_OverrideReferenceName": "",
+    "m_OverrideReferenceName": "_EyeColor",
     "m_GeneratePropertyBlock": true,
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
@@ -1487,29 +1484,6 @@
 }
 
 {
-    "m_SGVersion": 1,
-    "m_Type": "UnityEditor.ShaderGraph.Internal.Vector1ShaderProperty",
-    "m_ObjectId": "6451b61af59e4fa9b4d4a52fa2fb2703",
-    "m_Guid": {
-        "m_GuidSerialized": "489c1732-b6cc-4396-885f-375d4c802137"
-    },
-    "m_Name": "Roughness",
-    "m_DefaultReferenceName": "Vector1_6451b61af59e4fa9b4d4a52fa2fb2703",
-    "m_OverrideReferenceName": "",
-    "m_GeneratePropertyBlock": true,
-    "m_Precision": 0,
-    "overrideHLSLDeclaration": false,
-    "hlslDeclarationOverride": 0,
-    "m_Hidden": false,
-    "m_Value": 0.0,
-    "m_FloatType": 0,
-    "m_RangeValues": {
-        "x": 0.0,
-        "y": 1.0
-    }
-}
-
-{
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.BlockNode",
     "m_ObjectId": "6558d90f6d154f88be903e5f84009064",
@@ -1939,11 +1913,11 @@
     },
     "m_Name": "EyeGlow",
     "m_DefaultReferenceName": "Vector1_8790993ed97c4b1d91b8b0c0efa8f39e",
-    "m_OverrideReferenceName": "",
+    "m_OverrideReferenceName": "_EyeGlow",
     "m_GeneratePropertyBlock": true,
     "m_Precision": 0,
-    "overrideHLSLDeclaration": false,
-    "hlslDeclarationOverride": 0,
+    "overrideHLSLDeclaration": true,
+    "hlslDeclarationOverride": 2,
     "m_Hidden": false,
     "m_Value": 71.19999694824219,
     "m_FloatType": 0,

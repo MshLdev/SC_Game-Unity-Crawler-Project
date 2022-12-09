@@ -6,8 +6,11 @@ public class Spell_Basic : MonoBehaviour
 {
     public AudioMenager audioM;
     public GameObject vfx;
+
     public float MaxLifeDuration;
     public float Damage;
+    public float DamageRange;
+    public float DamageForce;
 
     void Start()
     {
@@ -28,6 +31,21 @@ public class Spell_Basic : MonoBehaviour
             GameObject vfxInstantion = Instantiate(vfx, transform.position, Quaternion.identity);
             audioM.AudioAtPosition(AudioMenager.clips.fireCrack, transform.position);
             Destroy(vfxInstantion, 5.0f);
+
+            Vector3 explosionPos = transform.position;
+            Collider[] colliders = Physics.OverlapSphere(explosionPos, DamageRange);
+            foreach (Collider hit in colliders)
+            {
+                Rigidbody rb = hit.GetComponent<Rigidbody>();
+
+                if (rb != null)
+                {
+                    if(hit.gameObject.tag == "Enemy")
+                        hit.transform.root.GetComponent<Enemy>().SwitchRagdoll();
+
+                    rb.AddExplosionForce(DamageForce, explosionPos, DamageRange, 3.0F);
+                } 
+            }
         }
             
         Destroy(gameObject);

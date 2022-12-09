@@ -7,7 +7,7 @@ using UnityEngine;
 public class UI_telemetry : MonoBehaviour
 {
     public float TeleRefreshRate = 0.6f;
-    public string Game_Version = "[SimpCrawler v0.2a(13.08.2022)] --> Build";
+    public string Game_Version = "[SimpCrawler v0.5a(28.08.2022--14:31)] --> Alpha Build";
     public int avgFrameRate;
     
     Text Tele_Text;
@@ -22,8 +22,9 @@ public class UI_telemetry : MonoBehaviour
     public void Start()
     {
         Text_GO = GameObject.Find("UI_Telemetry");
-        Tele_Text = Text_GO.GetComponent<Text>();
         Player_GO = GameObject.Find("_PLAYER");
+
+        Tele_Text = Text_GO.GetComponent<Text>();
         textUpdate();
     }
 

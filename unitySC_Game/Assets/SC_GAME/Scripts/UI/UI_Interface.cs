@@ -3,6 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+
+///This script currently draws and picks the spell bars and Modifies the 
+///character Mesh properties
+///Better to rename it in the future or split it and integrate into other scripts
+
+///This script Depends on AudioMenager which actually is acceptable
+
+
 public class UI_Interface : MonoBehaviour
 {
     public int currentSlotid = 0;
@@ -17,9 +26,11 @@ public class UI_Interface : MonoBehaviour
 
     void Start()
     {
+        ///to access the healthbars
         UI_Object = GameObject.Find("UI_Interface");
+        //To access the Arms
         heroArms = GameObject.Find("Arms_Mesh");
-
+        //This is not spaghetti, ok?
         audioM = GameObject.Find("_GAME").GetComponent<AudioMenager>();
         SpellBar_Hook = GameObject.Find("SpellBar");
         //pickSpell(currentSlotid);
