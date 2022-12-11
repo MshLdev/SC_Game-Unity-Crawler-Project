@@ -11,6 +11,8 @@ public class AudioMenager : MonoBehaviour
 
     public enum clips
     {
+      NONE        =-1,
+      ///////////////////
       fireBurst   = 0,
       fireCrack   = 1,
       fireTorch   = 2,
@@ -21,6 +23,7 @@ public class AudioMenager : MonoBehaviour
       ui_select   = 5,
       ui_close    = 6, 
       ui_hover    = 7,
+      ui_splash   = 8,
     };
 
     void Start() 
@@ -33,10 +36,14 @@ public class AudioMenager : MonoBehaviour
       audioClips.Add(Resources.Load<AudioClip>("Audio/ui_select"));
       audioClips.Add(Resources.Load<AudioClip>("Audio/ui_close"));
       audioClips.Add(Resources.Load<AudioClip>("Audio/ui_hover"));
+      audioClips.Add(Resources.Load<AudioClip>("Audio/ui_splash"));
     }
 
     public void AudioAtPosition(clips audioId, Vector3 position)
     {
+      if(audioId == clips.NONE)
+        return;
+
        GameObject audioInstance = Instantiate(AudioPrefab, position, Quaternion.identity);
 
        audioInstance.GetComponent<AudioSource>().clip = audioClips[(int)audioId];
@@ -46,6 +53,9 @@ public class AudioMenager : MonoBehaviour
 
     public void AudioAsChild(clips audioId, Vector3 position, Transform parentGO)
     {
+      if(audioId == clips.NONE)
+        return;
+
        GameObject audioInstance = Instantiate(AudioPrefab, position, Quaternion.identity);
        audioInstance.transform.SetParent(parentGO);
 

@@ -6,7 +6,7 @@ public class Enemy : MonoBehaviour
 {
     Animator anim;
     constants cnst;
-    //BoxCollider entityColider;
+    BoxCollider entityColider;
     
 
     float statecoolfown = 0.6f;
@@ -15,7 +15,7 @@ public class Enemy : MonoBehaviour
 
     void Awake()
     {
-        //entityColider = gameObject.GetComponent<BoxCollider>();
+        entityColider = gameObject.GetComponent<BoxCollider>();
         anim = gameObject.GetComponent<Animator>();
 
         //not ised for now...
@@ -50,7 +50,7 @@ public class Enemy : MonoBehaviour
     public void SwitchRagdoll() 
     {
         Debug.Log("Switching!");
-        //entityColider.enabled = !entityColider.enabled;
+        entityColider.enabled = !entityColider.enabled;
         anim.enabled = !anim.enabled;
 
         foreach ( Rigidbody rb in transform.GetComponentsInChildren<Rigidbody>() ) 

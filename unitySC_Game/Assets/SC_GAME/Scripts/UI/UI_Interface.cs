@@ -18,21 +18,16 @@ public class UI_Interface : MonoBehaviour
     public int currentSlotid = 0;
     public int currentSpellId = 0;
     public GameObject[] SpellBook;
-
-    GameObject SpellBar_Hook;
-    AudioMenager audioM;
+    public float spellcost = -12.5f;
 
     GameObject UI_Object;
+    AudioMenager audioM;
 
     ///Init in script loadup, becouse this data can be needed before Start() is called
     void Awake()
     {
-        ///to access the healthbars
         UI_Object = GameObject.Find("UI_Interface");
-        //This is not spaghetti, ok?
         audioM = GameObject.Find("_GAME").GetComponent<AudioMenager>();
-        SpellBar_Hook = GameObject.Find("SpellBar");
-        //pickSpell(currentSlotid);
     }
 
     void Update()
@@ -55,14 +50,9 @@ public class UI_Interface : MonoBehaviour
     void pickSpell(int slotIndex)
     {   
         audioM.AudioAtPlayer(AudioMenager.clips.ui_select);
-        //Debug.Log($"picked spell number{slotIndex}");
-        SpellBar_Hook.transform.GetChild(currentSlotid).GetComponent<Image>().color = new Color32(75, 75, 75, 255);
-        SpellBar_Hook.transform.GetChild(slotIndex).GetComponent<Image>().color = Color.green;
+        UI_Object.transform.GetChild(2).GetChild(currentSlotid).GetComponent<Image>().color = new Color32(75, 75, 75, 255);
+        UI_Object.transform.GetChild(2).GetChild(slotIndex).GetComponent<Image>().color = Color.green;
         currentSlotid = slotIndex;
     }
 
-    void closeApp()
-    {
-        
-    }
 }

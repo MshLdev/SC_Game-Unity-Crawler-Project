@@ -134,9 +134,9 @@ public class UI_Inventory : MonoBehaviour
 
     private void slotClicked(int sID)
     {
-        ///Switch items in hand/slot
-        //Debug.Log("There was item["+itemHand+"] in the hand, now there is item["+itemsList[sID]+"] in the hand");
-
+        audioM.AudioAtPlayer(db.DATA_item[itemsList[sID]].sound);
+        Debug.Log(db.DATA_item[itemsList[sID]].sound);
+    
         //change id's
         int itemToswitch = itemsList[sID];
         itemsList[sID] = itemHand;

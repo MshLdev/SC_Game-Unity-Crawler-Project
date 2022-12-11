@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Destructable
   - Enemy
+  - Spell
   layers:
   - Default
   - TransparentFX

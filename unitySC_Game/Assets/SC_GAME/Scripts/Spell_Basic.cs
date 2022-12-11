@@ -34,16 +34,16 @@ public class Spell_Basic : MonoBehaviour
 
             Vector3 explosionPos = transform.position;
             Collider[] colliders = Physics.OverlapSphere(explosionPos, DamageRange);
+
             foreach (Collider hit in colliders)
             {
-                Rigidbody rb = hit.GetComponent<Rigidbody>();
-
+                if(hit.gameObject.tag == "Spell")
+                    break;
+                
                 if(hit.gameObject.tag == "Enemy")
-                    {
-                        hit.transform.root.GetComponent<Enemy>().SwitchRagdoll();
-                        Debug.Log("Another enemy in range! Calling switch on them!");
-                    }
-
+                    hit.transform.root.GetComponent<Enemy>().SwitchRagdoll();
+                    
+                Rigidbody rb = hit.GetComponent<Rigidbody>();
                 if (rb != null)
                     rb.AddExplosionForce(DamageForce, explosionPos, DamageRange, 3.0F);
             }
