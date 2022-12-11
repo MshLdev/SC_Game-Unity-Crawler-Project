@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 
 
@@ -22,14 +23,12 @@ public class UI_Interface : MonoBehaviour
     AudioMenager audioM;
 
     GameObject UI_Object;
-    GameObject heroArms;
 
-    void Start()
+    ///Init in script loadup, becouse this data can be needed before Start() is called
+    void Awake()
     {
         ///to access the healthbars
         UI_Object = GameObject.Find("UI_Interface");
-        //To access the Arms
-        heroArms = GameObject.Find("Arms_Mesh");
         //This is not spaghetti, ok?
         audioM = GameObject.Find("_GAME").GetComponent<AudioMenager>();
         SpellBar_Hook = GameObject.Find("SpellBar");
@@ -46,26 +45,11 @@ public class UI_Interface : MonoBehaviour
         }
     }
 
-    public void updateBars(float mana, float maxmana, float health, float maxhealth)
+
+    public void updateBar(int barID, float value, float maxvalue)
     {
-        float mscalefactor = (mana/maxmana);
-        float hscalefactor = (health/maxhealth);
-
-        ///TO JEST DO WYJEBANIA REEEEEEEEE
-        ///REEEEEEEEEEEEEEEEEEEEe (╯°□°）╯︵ ┻━┻
-        if(!UI_Object)
-            Start();
-
-        ////ABSYŚ NIE PSOĆ TUTAJ (ʘ‿ʘ)
-        UI_Object.transform.GetChild(1).GetChild(0).GetComponent<RectTransform>().localScale = new Vector3(mscalefactor, 1f, 1f);   //1 to jes HealthBar, kcemy od jego childa 'fill'
-        UI_Object.transform.GetChild(1).GetChild(1).GetComponent<Text>().text = $"{(int)mana}/{(int)maxmana}";
-
-        UI_Object.transform.GetChild(0).GetChild(0).GetComponent<RectTransform>().localScale = new Vector3(hscalefactor, 1f, 1f); 
-        UI_Object.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = $"{(int)health}/{(int)maxhealth}";
-
-
-        //Update also hands
-        heroArms.GetComponent<Renderer>().material.SetFloat("MaskGlow", 10f * mscalefactor);
+        UI_Object.transform.GetChild(barID).GetChild(0).GetComponent<RectTransform>().localScale = new Vector3(value/maxvalue, 1f, 1f);  
+        UI_Object.transform.GetChild(barID).GetChild(1).GetComponent<TextMeshProUGUI>().text = $"{(int)value}/{(int)maxvalue}";
     }
 
     void pickSpell(int slotIndex)

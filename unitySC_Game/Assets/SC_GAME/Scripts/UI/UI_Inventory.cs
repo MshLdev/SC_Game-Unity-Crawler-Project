@@ -28,20 +28,21 @@ public class UI_Inventory : MonoBehaviour
     //Items Manipulation
     private int[] itemsList;
     private int pageID = 0;
-    private int itemHand = 5;
+    private int itemHand = 0;
     
     //depends on
     private GameObject ui_inv;
     private AudioMenager audioM;
+    private DATABASE db;
 
     void Start()
     {
-        //start ItemArray with empty slots
-        itemsList = new int[numberOfX * numberOfY];
-        //For UI elements to spawn
-        ui_inv = GameObject.Find("UI_Inventory");
-        //for Audio
-        audioM = GameObject.Find("_GAME").GetComponent<AudioMenager>();
+        itemsList =     new int[numberOfX * numberOfY];                             //start ItemArray with empty slots
+        ui_inv =        GameObject.Find("UI_Inventory");                            //For UI elements to spawn
+        audioM =        GameObject.Find("_GAME").GetComponent<AudioMenager>();      //for Audio
+        db =            GameObject.Find("_GAME").GetComponent<DATABASE>();          //for game db
+        //add starting items
+        startingItems();
         //InitTheUI
         InitSlots(numberOfX, numberOfY);
         //Switch On/Off
@@ -67,9 +68,16 @@ public class UI_Inventory : MonoBehaviour
                 int currID = (i*numY) + j;
                 //how to find Slot Id
                 ///Debug.Log("Initing slot id -> " + ((i*numY) + j+1));
+
+                //Why I did it as a child 3???? No idea....
                 GameObject newSlot = GameObject.Instantiate(ui_invSlot, Vector3.zero, Quaternion.identity, ui_inv.transform.GetChild(3).transform);
                 newSlot.GetComponent<RectTransform>().localPosition = slotStartVector + new Vector3((slotSize+RowsMargin) * j, (slotSize+ColumnsMargin) * i * -1, 0);
                 newSlot.GetComponent<RectTransform>().sizeDelta = new Vector2(slotSize, slotSize);
+                newSlot.name = "eq_slot["+ currID +"]";
+                
+                ///set an actual icon
+                int itemid = itemsList[currID];
+                newSlot.transform.GetChild(0).GetComponent<Image>().sprite = db.DATA_item[itemid].icon;
 
                 ////EVENTYY
                 /////AUDIO jako event trigger (SKOPIOWANE PROSTO Z DOKUMENTACJI, TROCHE DZIWNE UGUŁEM)
@@ -108,6 +116,12 @@ public class UI_Inventory : MonoBehaviour
             
     }
 
+    void startingItems()
+    {
+        itemsList[0] = 1;   // add hp potiom
+        itemsList[1] = 2;   // add mp potion
+    }
+
     void pickupItem(int iID)
     {
         for (int i = 0; i < itemsList.Length; i++ )
@@ -123,9 +137,14 @@ public class UI_Inventory : MonoBehaviour
         ///Switch items in hand/slot
         //Debug.Log("There was item["+itemHand+"] in the hand, now there is item["+itemsList[sID]+"] in the hand");
 
+        //change id's
         int itemToswitch = itemsList[sID];
         itemsList[sID] = itemHand;
         itemHand = itemToswitch;
+        //update icons
+        ui_handImage.sprite = db.DATA_item[itemHand].icon;
+        //For some rason I didnt store the reference to the slot holder to we do it by accessing child 3, WHAT THE FUCK????????
+        ui_inv.transform.GetChild(3).GetChild(sID).GetChild(0).GetComponent<Image>().sprite = db.DATA_item[itemsList[sID]].icon;
     }
 
     private void updateHand()

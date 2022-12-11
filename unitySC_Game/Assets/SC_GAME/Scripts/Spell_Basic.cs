@@ -38,13 +38,14 @@ public class Spell_Basic : MonoBehaviour
             {
                 Rigidbody rb = hit.GetComponent<Rigidbody>();
 
-                if (rb != null)
-                {
-                    if(hit.gameObject.tag == "Enemy")
+                if(hit.gameObject.tag == "Enemy")
+                    {
                         hit.transform.root.GetComponent<Enemy>().SwitchRagdoll();
+                        Debug.Log("Another enemy in range! Calling switch on them!");
+                    }
 
+                if (rb != null)
                     rb.AddExplosionForce(DamageForce, explosionPos, DamageRange, 3.0F);
-                } 
             }
         }
             

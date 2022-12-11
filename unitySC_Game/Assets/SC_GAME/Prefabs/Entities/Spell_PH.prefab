@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8794854283381046769}
   - component: {fileID: 8794854283381046781}
   - component: {fileID: 2097898731083481547}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Spell_PH
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -88,9 +88,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8794854283381046780}
     m_Modifications:
+    - target: {fileID: 5564209098627637394, guid: 38cc2c466f47eb447847b03df0cdfbde, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5704525636109723119, guid: 38cc2c466f47eb447847b03df0cdfbde, type: 3}
       propertyPath: m_Name
       value: spell_Test
+      objectReference: {fileID: 0}
+    - target: {fileID: 5704525636109723119, guid: 38cc2c466f47eb447847b03df0cdfbde, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6626456233034471943, guid: 38cc2c466f47eb447847b03df0cdfbde, type: 3}
       propertyPath: m_RootOrder
@@ -147,6 +155,10 @@ PrefabInstance:
     - target: {fileID: 6626456233034471943, guid: 38cc2c466f47eb447847b03df0cdfbde, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6686663996020835587, guid: 38cc2c466f47eb447847b03df0cdfbde, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 38cc2c466f47eb447847b03df0cdfbde, type: 3}

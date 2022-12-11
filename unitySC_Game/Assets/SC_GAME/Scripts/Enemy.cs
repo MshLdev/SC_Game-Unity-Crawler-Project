@@ -6,27 +6,25 @@ public class Enemy : MonoBehaviour
 {
     Animator anim;
     constants cnst;
-    private bool started = false;
+    //BoxCollider entityColider;
+    
 
     float statecoolfown = 0.6f;
     float statetimer = 0f;
     float Idlefactor = 1f;
 
-    void Start()
+    void Awake()
     {
-        if(!started)
-        {
+        //entityColider = gameObject.GetComponent<BoxCollider>();
         anim = gameObject.GetComponent<Animator>();
+
         //not ised for now...
         //cnst = GameObject.Find("_GAME").GetComponent<constants>();
 
         //Testing color variants
         //foreach ( Renderer go in GetComponentsInChildren<Renderer>() ) 
-            //go.material.SetColor("_EyeColor", new Color32((byte)Random.Range(0, 250), (byte)Random.Range(0, 250), (byte)Random.Range(0, 250), 255));
+            //go.material.SetColor("_EyeColor", new Color32((byte)Random.Range(0, 250), (byte)Random.Range(0, 250), (byte)Random.Range(0, 250), 255))
         
-        SwitchRagdoll();  
-        started = true;  
-        }
     }
 
     void Update()
@@ -51,24 +49,19 @@ public class Enemy : MonoBehaviour
 
     public void SwitchRagdoll() 
     {
-        foreach ( Rigidbody rb in GetComponentsInChildren<Rigidbody>() ) 
-        {
-            bool currentState = rb.isKinematic;
-            rb.isKinematic = !currentState;
-            anim.enabled = !currentState;
-        }
-        
+        Debug.Log("Switching!");
+        //entityColider.enabled = !entityColider.enabled;
+        anim.enabled = !anim.enabled;
 
+        foreach ( Rigidbody rb in transform.GetComponentsInChildren<Rigidbody>() ) 
+            rb.isKinematic = !rb.isKinematic;
+        
+        
         float eyeglow = 77f;
         if(!anim.enabled)
             eyeglow = 0f;
 
         foreach ( Renderer go in GetComponentsInChildren<Renderer>() ) 
             go.material.SetFloat("_EyeGlow", eyeglow);
-     }
-
-     public void ForceStart()
-     {
-        Start();
      }
 }

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4327561602982448913}
   - component: {fileID: 5664202727899243973}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Env_Door
   m_TagString: Destructable
   m_Icon: {fileID: 0}
@@ -56,7 +56,7 @@ GameObject:
   - component: {fileID: 3782639320971525705}
   - component: {fileID: 2065337173985232643}
   - component: {fileID: 3282058798263411607}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}

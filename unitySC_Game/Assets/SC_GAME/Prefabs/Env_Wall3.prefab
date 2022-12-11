@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7943188589338396108}
   - component: {fileID: 5110724331706629254}
   - component: {fileID: 8631512154558863378}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: site0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   - component: {fileID: 7044002141453873474}
   - component: {fileID: 7044002141453873476}
   - component: {fileID: 7044002141453873477}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: site1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -174,7 +174,7 @@ GameObject:
   - component: {fileID: 7190524735219560002}
   - component: {fileID: 6607480284608376119}
   - component: {fileID: 3791651342747391969}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Env_Wall3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -297,8 +297,16 @@ PrefabInstance:
       value: arch0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: ac1de6ba8ac3fd746ab63654d8644fd1, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ac1de6ba8ac3fd746ab63654d8644fd1, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: ac1de6ba8ac3fd746ab63654d8644fd1, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8164078558771037576, guid: ac1de6ba8ac3fd746ab63654d8644fd1, type: 3}
       propertyPath: m_StaticEditorFlags

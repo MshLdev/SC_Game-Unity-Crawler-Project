@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8174290833015821030}
   - component: {fileID: 6460349242220342188}
   - component: {fileID: 7530721479988793144}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -90,7 +90,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6042948826230364308}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: arch0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -124,7 +124,7 @@ GameObject:
   - component: {fileID: 9118214177177175128}
   - component: {fileID: 6766488139127360513}
   - component: {fileID: 2508451955915721931}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Env_wall1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -197,7 +197,7 @@ GameObject:
   - component: {fileID: 5192803043960728821}
   - component: {fileID: 4684601382043490076}
   - component: {fileID: 5155358187601666549}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}

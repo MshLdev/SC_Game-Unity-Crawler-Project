@@ -12,8 +12,7 @@ public class Debuger : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.F2))
         {
             GameObject RoachRgdl =  Instantiate(rgdlTestObject, new Vector3(5f, 10f, 8f), Quaternion.identity);
-            RoachRgdl.GetComponent<Enemy>().ForceStart();
-            RoachRgdl.GetComponent<Enemy>().SwitchRagdoll();
+            //RoachRgdl.GetComponent<Enemy>().SwitchRagdoll();
         } 
     }
 }

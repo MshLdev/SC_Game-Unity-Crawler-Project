@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1186976206344023256}
   - component: {fileID: 4858813707077883787}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Env_Column1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -56,7 +56,7 @@ GameObject:
   - component: {fileID: 1731854649087286656}
   - component: {fileID: 3521788507210573002}
   - component: {fileID: 142529545826058334}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
