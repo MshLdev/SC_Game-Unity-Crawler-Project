@@ -24,7 +24,6 @@ public class Enemy : MonoBehaviour
         //Testing color variants
         //foreach ( Renderer go in GetComponentsInChildren<Renderer>() ) 
             //go.material.SetColor("_EyeColor", new Color32((byte)Random.Range(0, 250), (byte)Random.Range(0, 250), (byte)Random.Range(0, 250), 255))
-        
     }
 
     void Update()
@@ -49,7 +48,6 @@ public class Enemy : MonoBehaviour
 
     public void SwitchRagdoll() 
     {
-        Debug.Log("Switching!");
         entityColider.enabled = !entityColider.enabled;
         anim.enabled = !anim.enabled;
 

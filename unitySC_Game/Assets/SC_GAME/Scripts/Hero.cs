@@ -51,8 +51,9 @@ public class Hero : MonoBehaviour
 
     void updateArms()
     {
-        float glowPotential = mana.maxvalue/(16 + (mana.maxvalue/50));
+        heroArms.transform.parent.GetComponent<Animator>().enabled = !Cursor.visible;
 
+        float glowPotential = mana.maxvalue/(16 + (mana.maxvalue/50));
         heroArms.GetComponent<Renderer>().material.SetFloat("MaskGlow", glowPotential * mana.value/mana.maxvalue);
     }
 
