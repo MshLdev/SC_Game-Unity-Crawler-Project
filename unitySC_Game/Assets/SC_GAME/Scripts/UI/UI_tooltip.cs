@@ -14,6 +14,7 @@ public class UI_tooltip : MonoBehaviour
 
     private string Tname = "";
     private string Tdsc = "";
+    private bool Tsimple = false;
 
     void Awake()
     {
@@ -25,7 +26,10 @@ public class UI_tooltip : MonoBehaviour
     {
         ui_tt.transform.position = Input.mousePosition + offset;
 
-        if(!Input.GetKey(KeyCode.LeftAlt))
+
+        if (Tsimple)
+            ui_tt.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = Tname;
+        else if(!Input.GetKey(KeyCode.LeftAlt))
             ui_tt.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = Tname + "(Hold Alt)";
         else
             ui_tt.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = Tname + "\n\n" + Tdsc;
@@ -38,10 +42,18 @@ public class UI_tooltip : MonoBehaviour
 
         Tname = name;
         Tdsc = desc;
+        Tsimple = false;
 
         ui_tt.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = txtColors[bg];
         ui_tt.GetComponent<Image>().color = bgColors[bg];
 
+        ui_tt.SetActive(true); 
+    }
+
+    public void DisplayTooltip(string name)
+    {
+        DisplayTooltipItem(name, "", 0);
+        Tsimple = true;
         ui_tt.SetActive(true); 
     }
 

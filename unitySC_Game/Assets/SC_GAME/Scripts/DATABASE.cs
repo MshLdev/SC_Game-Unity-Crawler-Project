@@ -7,14 +7,19 @@ public class DATABASE : MonoBehaviour
 {
 
     public List<item> DATA_item;
+    public HeroDB DATA_Hero;
 
-    ///call on script loadup
     void Awake()
-    {
+    {   
+        initHero();
         initItems();
     }    
+
+    public void initHero()
+    {
+        DATA_Hero = new HeroDB();
+    }
     
-     //create items list
     public void initItems()
     {
         DATA_item = new List<item>();
@@ -25,38 +30,99 @@ public class DATABASE : MonoBehaviour
         DATA_item.Add(new item(4, "Mleczny Człowiek's Apple", "This is Mleczny Człowiek's\n Personal Apple, he never leaves home without it\n what is it doing in your inventory?? o.0", "icons/apple", true, AudioMenager.clips.ui_squish, uniqueness.RARE));
     }
 
+}
 
-    public struct item 
+
+public struct item 
+{
+    
+    public ushort               Id;
+    public string               Name;
+    public string               Desc;
+    public bool                 Consumable;
+    public Sprite               icon;
+    public uniqueness           rarity;
+    public AudioMenager.clips   sound;
+    
+    public item(ushort id, string name, string desc, string iconsource, bool cns, AudioMenager.clips s, uniqueness r)
     {
+        this.Id         = id;
+        this.Name       = name;
+        this.Desc       = desc;
+        this.icon       = Resources.Load<Sprite>(iconsource);
+        this.Consumable = cns;
+        this.sound = s;
+        this.rarity = r;
+    }
+}
+
+
+public class HeroDB
+{
+    public ushort level         = 1;
+    public ushort exp           = 0;
+    public ushort expNext       = 75;
     
-        public int                  Id;
-        public string               Name;
-        public string               Desc;
-        public bool                 Consumable;
-        public Sprite               icon;
-        public uniqueness           rarity;
-        public AudioMenager.clips   sound;
+    public ushort vitality      = 4;
+    public ushort inteligence   = 9;
+    public ushort strengh       = 2;
+    public ushort agility       = 3;
+
+    public barSystem health = new barSystem("health", 100, 100, 10);
+    public barSystem mana = new barSystem("mana", 80, 80, 5);
+}
+
+//Finished structure, nothing to change now
+//Everything about the health and mana bars in here
+public struct barSystem
+{
+    public string name;
+
+    public float value;
+    public float maxvalue;
+    public float regenvalue;
+
+    public float targetValue;
     
-        //Constructor (not necessary, but helpful)
-        public item(int id, string name, string desc, string iconsource, bool cns, AudioMenager.clips s, uniqueness r)
-        {
-            this.Id         = id;
-            this.Name       = name;
-            this.Desc       = desc;
-            this.icon       = Resources.Load<Sprite>(iconsource);
-            this.Consumable = cns;
-            this.sound = s;
-            this.rarity = r;
-        }
+    public barSystem(string n, float v, float mv, float rv)
+    {
+        this.name = n;
+
+        this.value = v;
+        this.maxvalue = mv;
+        this.regenvalue = rv;
+
+        this.targetValue = mv;
     }
 
-    public enum uniqueness
+    public void ValueToTarget()
     {
-        COMMON      = 0,
-        UNCOMMON    = 1,
-        RARE        = 2,
-        LEGENDARY   = 3, 
+        if(this.targetValue > this.maxvalue)
+            this.targetValue = this.maxvalue;
+        this.value = Mathf.Lerp(this.value, this.targetValue, Time.deltaTime);
     }
+
+    public void Regen()
+    {
+        if(this.value < this. maxvalue)
+            this.targetValue = this.value + this.regenvalue;
+        else
+            return;
+    }
+
+    public void Deal(float ammount)
+    {
+        this.targetValue += ammount;
+    }
+}
+//Finished structure, nothing to change now
+//simple enum for rarity
+public enum uniqueness
+{
+    COMMON      = 0,
+    UNCOMMON    = 1,
+    RARE        = 2,
+    LEGENDARY   = 3, 
 }
 
 

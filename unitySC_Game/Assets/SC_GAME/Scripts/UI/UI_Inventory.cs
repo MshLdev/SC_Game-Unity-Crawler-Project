@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using TMPro;
 
 
 ///SKRYPCIK EKWIPINKU
@@ -30,6 +31,13 @@ public class UI_Inventory : MonoBehaviour
     private int[] itemsList;
     private int pageID = 0;
     private int itemHand = 0;
+
+    ///Hotbar, needs refactor, Monolith workflow
+    public int currentSlotid = 0;
+    public int currentSpellId = 0;
+    public GameObject[] SpellBook;
+    public float spellcost = -12.5f;
+    GameObject UI_Object;
     
     //depends on
     private GameObject ui_inv;
@@ -39,26 +47,56 @@ public class UI_Inventory : MonoBehaviour
 
     void Start()
     {
-        itemsList =     new int[numberOfX * numberOfY];                //start ItemArray with empty slots
-        ui_inv =        GameObject.Find("UI_Slots");                   //For UI elements to spawn
+        itemsList =     new int[numberOfX * numberOfY + 10];           //start ItemArray with empty slots
+        ui_inv =        GameObject.Find("UI_Slots");                  //For UI elements to spawn
+        UI_Object =     GameObject.Find("UI_Interface");
         ui_tooltip =    gameObject.GetComponent<UI_tooltip>();        //For UI elements to spawn
         audioM =        gameObject.GetComponent<AudioMenager>();      //for Audio
         db =            gameObject.GetComponent<DATABASE>();          //for game db
         //add starting items
         startingItems();
         //InitTheUI
+        InitHotbarSlots();
         InitSlots(numberOfX, numberOfY);
         //Switch On/Off
         switchInventory();
     }
 
     void Update()
-    {
+    {   
+        updateBar(1, db.DATA_Hero.mana.value, db.DATA_Hero.mana.maxvalue);
+        updateBar(0, db.DATA_Hero.health.value, db.DATA_Hero.health.maxvalue);
+
+        hotbarInput();
         updateHand();
         if(Input.GetKeyDown(KeyCode.I))
             switchInventory();
     }
 
+    void InitHotbarSlots()
+    {
+        int i = 0;
+        foreach(Transform hbSlot in ui_inv.transform)
+        {
+            ///???????????????????????????????????????????????????????
+            int Slot = i;//???????????????????????????????????????????
+            //????????????????????????????????????????????????????????
+            EventTrigger trigger = hbSlot.GetComponent<EventTrigger>();
+
+            EventTrigger.Entry EnterEvent = new EventTrigger.Entry();
+            EnterEvent.eventID = EventTriggerType.PointerEnter;
+            EnterEvent.callback.AddListener( (eventData) => { audioM.AudioAtPlayer(AudioMenager.clips.ui_hover); ui_tooltip.DisplayTooltipItem(db.DATA_item[itemsList[Slot]].Name, db.DATA_item[itemsList[Slot]].Desc , (int)db.DATA_item[itemsList[Slot]].rarity); } );
+            trigger.triggers.Add(EnterEvent);
+
+            
+            EventTrigger.Entry ExitEvent = new EventTrigger.Entry();
+            ExitEvent.eventID = EventTriggerType.PointerExit;
+            ExitEvent.callback.AddListener( (eventData) => { audioM.AudioAtPlayer(AudioMenager.clips.ui_hover); ui_tooltip.DisableTooltip(); } );
+            trigger.triggers.Add(ExitEvent);
+            i++;
+
+        }
+    }
     //To create the Grid of Cells
     //In the future also for refresing the eq
     void InitSlots(int numX, int numY)
@@ -68,7 +106,8 @@ public class UI_Inventory : MonoBehaviour
             for(int j = 0; j < numY; j++)
             {   
                 //This prevents Bug in 'AddListener()'
-                int currID = (i*numY) + j;
+                //ADDING + 10 IN VERSION 0.6 ONWARD FOR HOTBAR FUNCTIONALITY!!!!
+                int currID = (i*numY) + j + 10;
                 //how to find Slot Id
                 ///Debug.Log("Initing slot id -> " + ((i*numY) + j+1));
 
@@ -98,10 +137,9 @@ public class UI_Inventory : MonoBehaviour
 
                 trigger.triggers.Add(EnterEvent);
                 trigger.triggers.Add(ExitEvent);
+
                 /////ON CLICK
-                //newSlot.GetComponent<Button>().onClick.AddListener( () => slotClicked(i) );
-                Button btn = newSlot.GetComponent<Button>();
-                btn.onClick.AddListener(delegate {slotClicked(currID); });
+                newSlot.GetComponent<Button>().onClick.AddListener(delegate {slotClicked(currID); });;
                 ////EVENTY/
             }
         }
@@ -132,10 +170,10 @@ public class UI_Inventory : MonoBehaviour
 
     void startingItems()
     {
-        itemsList[0] = 1;   // add hp potiom
-        itemsList[1] = 2;   // add mp potion
-        itemsList[2] = 3;   // add mp potion
-        itemsList[3] = 4;   // add mp potion
+        itemsList[10] = 1;   // add hp potiom
+        itemsList[11] = 2;   // add mp potion
+        itemsList[12] = 3;   // add drink
+        itemsList[13] = 4;   // add apple
     }
   
     void pickupItem(int iID)
@@ -148,7 +186,7 @@ public class UI_Inventory : MonoBehaviour
             }
     }
 
-    private void slotClicked(int sID)
+    public void slotClicked(int sID)
     {
         audioM.AudioAtPlayer(db.DATA_item[itemsList[sID]].sound);
         //change id's
@@ -159,6 +197,9 @@ public class UI_Inventory : MonoBehaviour
         ui_handImage.sprite = db.DATA_item[itemHand].icon;
         //For some rason I didnt store the reference to the slot holder to we do it by accessing child 3, WHAT THE FUCK????????
         ui_inv.transform.GetChild(sID).GetChild(0).GetComponent<Image>().sprite = db.DATA_item[itemsList[sID]].icon;
+
+        if(sID < 10)
+            UI_Object.transform.GetChild(2).GetChild(sID).GetChild(0).GetComponent<Image>().sprite = db.DATA_item[itemsList[sID]].icon;
     }
 
     private void updateHand()
@@ -171,5 +212,33 @@ public class UI_Inventory : MonoBehaviour
     {
         switchInventory();
     }
+    
+    //////////////////////////////////////////////
+    //  HOTBAR
+    void hotbarInput()
+    {
+        if(Input.inputString != "")
+        {
+            int selector;
+            if (int.TryParse(Input.inputString, out selector))
+                pickSpell(selector);
+        }
+    }
+
+
+    public void updateBar(int barID, float value, float maxvalue)
+    {
+        UI_Object.transform.GetChild(barID).GetChild(0).GetComponent<RectTransform>().localScale = new Vector3(value/maxvalue, 1f, 1f);  
+        UI_Object.transform.GetChild(barID).GetChild(1).GetComponent<TextMeshProUGUI>().text = $"{(int)value}/{(int)maxvalue}";
+    }
+
+    void pickSpell(int slotIndex)
+    {   
+        audioM.AudioAtPlayer(AudioMenager.clips.ui_select);
+        UI_Object.transform.GetChild(2).GetChild(currentSlotid).GetComponent<Image>().color = new Color32(75, 75, 75, 255);
+        UI_Object.transform.GetChild(2).GetChild(slotIndex).GetComponent<Image>().color = Color.green;
+        currentSlotid = slotIndex;
+    }
 
 }
+
