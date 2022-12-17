@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Debuger : MonoBehaviour
+public class DEBUGER : MonoBehaviour
 {
     public GameObject rgdlTestObject;
 

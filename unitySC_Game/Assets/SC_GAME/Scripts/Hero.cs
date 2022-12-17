@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class Hero : MonoBehaviour
 {
-    UI_Inventory uiinterface;
+    UI_Interface uiinterface;
     GameObject heroArms;
     DATABASE db;
 
     void Start()
     {
-        uiinterface     = GameObject.Find("_GAME").GetComponent<UI_Inventory>();
+        uiinterface     = GameObject.Find("_GAME").GetComponent<UI_Interface>();
         db              = GameObject.Find("_GAME").GetComponent<DATABASE>();
         InvokeRepeating("Regen", 0, 1.5f);
         
@@ -24,10 +24,7 @@ public class Hero : MonoBehaviour
     {
         //cASTING INTEGRATION
         if(Input.GetKeyDown(KeyCode.Mouse0) && !Cursor.visible)
-            castSpell();
-
-        db.DATA_Hero.mana.ValueToTarget();
-        db.DATA_Hero.health.ValueToTarget();        
+            castSpell();    
         updateArms();    
     }
 

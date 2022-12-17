@@ -5,7 +5,6 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     Animator anim;
-    constants cnst;
     BoxCollider entityColider;
     
 
@@ -17,13 +16,6 @@ public class Enemy : MonoBehaviour
     {
         entityColider = gameObject.GetComponent<BoxCollider>();
         anim = gameObject.GetComponent<Animator>();
-
-        //not ised for now...
-        //cnst = GameObject.Find("_GAME").GetComponent<constants>();
-
-        //Testing color variants
-        //foreach ( Renderer go in GetComponentsInChildren<Renderer>() ) 
-            //go.material.SetColor("_EyeColor", new Color32((byte)Random.Range(0, 250), (byte)Random.Range(0, 250), (byte)Random.Range(0, 250), 255))
     }
 
     void Update()

@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
 using TMPro;
+using static DATABASE.itemSlot;
 
 
 ///SKRYPCIK EKWIPINKU
 ///
 ///
 ///
-public class UI_Inventory : MonoBehaviour
+public class UI_Interface: MonoBehaviour
 {
     
     public GameObject ui_invSlot;
@@ -26,11 +25,6 @@ public class UI_Inventory : MonoBehaviour
     //Size of an icon
     public float slotSize;
     public Vector3 slotStartPosition= new Vector3 (-125, 180, 0);
-
-    //Items Manipulation
-    private int[] itemsList;
-    private int pageID = 0;
-    private int itemHand = 0;
 
     ///Hotbar, needs refactor, Monolith workflow
     public int currentSlotid = 0;
@@ -47,12 +41,16 @@ public class UI_Inventory : MonoBehaviour
 
     void Start()
     {
-        itemsList =     new int[numberOfX * numberOfY + 10];           //start ItemArray with empty slots
-        ui_inv =        GameObject.Find("UI_Slots");                  //For UI elements to spawn
-        UI_Object =     GameObject.Find("UI_Interface");
         ui_tooltip =    gameObject.GetComponent<UI_tooltip>();        //For UI elements to spawn
         audioM =        gameObject.GetComponent<AudioMenager>();      //for Audio
         db =            gameObject.GetComponent<DATABASE>();          //for game db
+
+        ui_inv =        GameObject.Find("UI_Slots");                  //For UI elements to spawn
+        UI_Object =     GameObject.Find("UI_Interface");
+
+        int[] tmpList = new int[numberOfX * numberOfY + 10];           //start ItemArray with empty slots
+        db.fillItemList(tmpList);
+
         //add starting items
         startingItems();
         //InitTheUI
@@ -66,11 +64,12 @@ public class UI_Inventory : MonoBehaviour
     {   
         updateBar(1, db.DATA_Hero.mana.value, db.DATA_Hero.mana.maxvalue);
         updateBar(0, db.DATA_Hero.health.value, db.DATA_Hero.health.maxvalue);
+        db.DATA_Hero.mana.ValueToTarget();
+        db.DATA_Hero.health.ValueToTarget();    
 
-        hotbarInput();
+        inputHotbar();
+        inputInventory();
         updateHand();
-        if(Input.GetKeyDown(KeyCode.I))
-            switchInventory();
     }
 
     void InitHotbarSlots()
@@ -85,7 +84,7 @@ public class UI_Inventory : MonoBehaviour
 
             EventTrigger.Entry EnterEvent = new EventTrigger.Entry();
             EnterEvent.eventID = EventTriggerType.PointerEnter;
-            EnterEvent.callback.AddListener( (eventData) => { audioM.AudioAtPlayer(AudioMenager.clips.ui_hover); ui_tooltip.DisplayTooltipItem(db.DATA_item[itemsList[Slot]].Name, db.DATA_item[itemsList[Slot]].Desc , (int)db.DATA_item[itemsList[Slot]].rarity); } );
+            EnterEvent.callback.AddListener( (eventData) => { audioM.AudioAtPlayer(AudioMenager.clips.ui_hover); ui_tooltip.DisplayTooltipItem(db.itemFromSlot(Slot).Name, db.itemFromSlot(Slot).Desc , (int)db.itemFromSlot(Slot).rarity); } );
             trigger.triggers.Add(EnterEvent);
 
             
@@ -120,8 +119,7 @@ public class UI_Inventory : MonoBehaviour
                 newSlot.name = "eq_slot["+ currID +"]";
                 
                 ///set an actual icon
-                int itemid = itemsList[currID];
-                newSlot.transform.GetChild(0).GetComponent<Image>().sprite = db.DATA_item[itemid].icon;
+                updateSlot(currID);
 
                 ////EVENTYY
                 /////AUDIO jako event trigger (SKOPIOWANE PROSTO Z DOKUMENTACJI, TROCHE DZIWNE UGUŁEM)
@@ -129,11 +127,11 @@ public class UI_Inventory : MonoBehaviour
 
                 EventTrigger.Entry EnterEvent = new EventTrigger.Entry();
                 EnterEvent.eventID = EventTriggerType.PointerEnter;
-                EnterEvent.callback.AddListener( (eventData) => { audioM.AudioAtPlayer(AudioMenager.clips.ui_hover); ui_tooltip.DisplayTooltipItem(db.DATA_item[itemsList[currID]].Name, db.DATA_item[itemsList[currID]].Desc , (int)db.DATA_item[itemsList[currID]].rarity); } );
+                EnterEvent.callback.AddListener( (eventData) => { audioM.AudioAtPlayer(AudioMenager.clips.ui_hover); ui_tooltip.DisplayTooltipItem(db.itemFromSlot(currID).Name, db.itemFromSlot(currID).Desc , (int)db.itemFromSlot(currID).rarity); } );
 
                 EventTrigger.Entry ExitEvent = new EventTrigger.Entry();
                 ExitEvent.eventID = EventTriggerType.PointerExit;
-                ExitEvent.callback.AddListener( (eventData) => { audioM.AudioAtPlayer(AudioMenager.clips.ui_hover); ui_tooltip.DisableTooltip(); } );
+                ExitEvent.callback.AddListener( (eventData) => { ui_tooltip.DisableTooltip(); } );
 
                 trigger.triggers.Add(EnterEvent);
                 trigger.triggers.Add(ExitEvent);
@@ -143,6 +141,15 @@ public class UI_Inventory : MonoBehaviour
                 ////EVENTY/
             }
         }
+    }
+
+    void inputInventory()
+    {
+        if(Input.GetKeyDown(KeyCode.I))
+            switchInventory();
+        
+        if(Input.GetKeyDown(KeyCode.Escape) && ui_inv.transform.parent.parent.gameObject.activeInHierarchy)
+            switchInventory();
     }
 
     ///do refaktoru, kto to narzigoł w taki sposób, zagryza
@@ -170,36 +177,78 @@ public class UI_Inventory : MonoBehaviour
 
     void startingItems()
     {
-        itemsList[10] = 1;   // add hp potiom
-        itemsList[11] = 2;   // add mp potion
-        itemsList[12] = 3;   // add drink
-        itemsList[13] = 4;   // add apple
+        pickupItem(1);   // add hp potiom
+        pickupItem(2);   // add hp potiom
+        pickupItem(3);   // add hp potiom
+        pickupItem(4);   // add hp potiom
+        pickupItem(1);   // add hp potiom
+        pickupItem(4);   // add hp potiom
     }
   
     void pickupItem(int iID)
     {
-        for (int i = 0; i < itemsList.Length; i++ )
-            if(itemsList[i] == 0)
-            {
-                itemsList[i] = iID;
-                break;
+        if(db.DATA_item[iID].stackable)
+            for( int i = 0 ; i < db.itemsList.Count; i++)
+            {   
+                if(db.itemsList[i].itemID == iID)
+                    if(db.itemsList[i].itemAmmount <= db.itemsList[i].AmmountCap)
+                    {
+                        db.itemsList[i].itemAmmount++;
+                        updateSlot(i);
+                        return;
+                    }
             }
+
+        for( int i = 0 ; i < db.itemsList.Count; i++)
+        {   
+            if(db.itemsList[i].itemID == 0)
+                {
+                    //if item is 0, it should have default values, that is, id, 1, 32(v0.6a)
+                    db.itemsList[i].itemID = iID;
+                    updateSlot(i);
+                    return;
+                } 
+        }
+
     }
 
-    public void slotClicked(int sID)
+    public void slotClicked(int Slot)
     {
-        audioM.AudioAtPlayer(db.DATA_item[itemsList[sID]].sound);
+        audioM.AudioAtPlayer(db.itemFromSlot(Slot).sound);
         //change id's
-        int itemToswitch = itemsList[sID];
-        itemsList[sID] = itemHand;
-        itemHand = itemToswitch;
-        //update icons
-        ui_handImage.sprite = db.DATA_item[itemHand].icon;
-        //For some rason I didnt store the reference to the slot holder to we do it by accessing child 3, WHAT THE FUCK????????
-        ui_inv.transform.GetChild(sID).GetChild(0).GetComponent<Image>().sprite = db.DATA_item[itemsList[sID]].icon;
+        DATABASE.itemSlot itemToswitch = db.itemsList[Slot];
+        db.itemsList[Slot] = db.itemHand;
+        db.itemHand = itemToswitch;
+        updateSlot(Slot);
+        ui_handImage.sprite = db.DATA_item[db.itemHand.itemID].icon;
+    }
 
-        if(sID < 10)
-            UI_Object.transform.GetChild(2).GetChild(sID).GetChild(0).GetComponent<Image>().sprite = db.DATA_item[itemsList[sID]].icon;
+    void updateSlot(int Slot)
+    {
+        ui_inv.transform.GetChild(Slot).GetChild(0).GetComponent<Image>().sprite = db.itemFromSlot(Slot).icon;
+        if(Slot < 10)
+            UI_Object.transform.GetChild(2).GetChild(Slot).GetChild(0).GetComponent<Image>().sprite = db.itemFromSlot(Slot).icon;
+
+        updateSlotAmmount(Slot);
+    }
+
+    void updateSlotAmmount(int Slot)
+    {
+
+        string ammount = "";
+
+        if (db.itemsList[Slot].itemID != 0)
+            {
+                if(db.itemFromSlot(Slot).stackable == false)
+                    ammount = "~";
+                else
+                    ammount += "" + db.itemsList[Slot].itemAmmount;
+            }
+        
+        ui_inv.transform.GetChild(Slot).GetChild(1).GetComponent<TextMeshProUGUI>().text = ammount;
+
+        if(Slot < 10)
+            UI_Object.transform.GetChild(2).GetChild(Slot).GetChild(2).GetComponent<TextMeshProUGUI>().text = ammount;
     }
 
     private void updateHand()
@@ -215,29 +264,37 @@ public class UI_Inventory : MonoBehaviour
     
     //////////////////////////////////////////////
     //  HOTBAR
-    void hotbarInput()
+    void inputHotbar()
     {
         if(Input.inputString != "")
         {
             int selector;
             if (int.TryParse(Input.inputString, out selector))
-                pickSpell(selector);
+                pickSlot(selector);
         }
     }
 
+    void pickSlot(int Slot)
+    {   
+        audioM.AudioAtPlayer(AudioMenager.clips.ui_select);
+        UI_Object.transform.GetChild(2).GetChild(currentSlotid).GetComponent<Image>().color = new Color32(75, 75, 75, 200);
+        UI_Object.transform.GetChild(2).GetChild(Slot).GetComponent<Image>().color = new Color32(25, 200, 25, 200);
+        currentSlotid = Slot;
+        
+        ////use item
+        db.useItem(db.itemsList[Slot]);
+        updateSlot(Slot);//we might have run out of item
+
+    }
+
+
+    ///////////////////////////////////////////////////
+    //// HEALTH/MANA BARS
 
     public void updateBar(int barID, float value, float maxvalue)
     {
         UI_Object.transform.GetChild(barID).GetChild(0).GetComponent<RectTransform>().localScale = new Vector3(value/maxvalue, 1f, 1f);  
         UI_Object.transform.GetChild(barID).GetChild(1).GetComponent<TextMeshProUGUI>().text = $"{(int)value}/{(int)maxvalue}";
-    }
-
-    void pickSpell(int slotIndex)
-    {   
-        audioM.AudioAtPlayer(AudioMenager.clips.ui_select);
-        UI_Object.transform.GetChild(2).GetChild(currentSlotid).GetComponent<Image>().color = new Color32(75, 75, 75, 255);
-        UI_Object.transform.GetChild(2).GetChild(slotIndex).GetComponent<Image>().color = Color.green;
-        currentSlotid = slotIndex;
     }
 
 }
