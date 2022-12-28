@@ -17,7 +17,7 @@ public class Hero : MonoBehaviour
         
         //To access the Arms
         heroArms = GameObject.Find("Arms_Mesh");
-        updateArms();
+        //updateArms();
     }
 
     void Update()
@@ -25,7 +25,7 @@ public class Hero : MonoBehaviour
         //cASTING INTEGRATION
         if(Input.GetKeyDown(KeyCode.Mouse0) && !Cursor.visible)
             castSpell();    
-        updateArms();    
+        //updateArms();    
     }
 
     void Regen()
