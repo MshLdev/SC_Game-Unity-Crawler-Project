@@ -8,14 +8,16 @@ using static DATABASE.itemSlot;
 
 
 ///SKRYPCIK EKWIPINKU
+/// od WERSJI v0.6 TEN SKRYPT ROBI SPORO, PIERWOTNE ZAŁOŻENIE POSZŁO SIE JEBAŚ
 ///
-///
-///
+
 public class UI_Interface: MonoBehaviour
 {
-    
+    //Slot Prefab
     public GameObject ui_invSlot;
+    //hand Icon
     public Image ui_handImage;
+    public Sprite crosshair;
     //eq Size 
     public int numberOfX;
     public int numberOfY;
@@ -24,20 +26,22 @@ public class UI_Interface: MonoBehaviour
     public float ColumnsMargin;
     //Size of an icon
     public float slotSize;
+    //Inventory start
     public Vector3 slotStartPosition= new Vector3 (-125, 180, 0);
 
     ///Hotbar, needs refactor, Monolith workflow
     public int currentSlotid = 0;
     public int currentSpellId = 0;
-    public GameObject[] SpellBook;
-    public float spellcost = -12.5f;
-    GameObject UI_Object;
+
+    public  float           spellcost = -12.5f;
+    public  GameObject[]    SpellBook;
+    private GameObject      UI_Object;
+    private GameObject      ui_inv;
     
     //depends on
-    private GameObject ui_inv;
-    private UI_tooltip ui_tooltip;
-    private AudioMenager audioM;
-    private DATABASE db;
+    private UI_tooltip          ui_tooltip;
+    private AudioMenager        audioM;
+    private DATABASE            db;
 
     void Start()
     {
@@ -180,31 +184,38 @@ public class UI_Interface: MonoBehaviour
         pickupItem(1);   // add hp potiom
         pickupItem(2);   // add hp potiom
         pickupItem(3);   // add hp potiom
-        pickupItem(4);   // add hp potiom
         pickupItem(1);   // add hp potiom
+        pickupItem(1);   // add hp potiom
+        pickupItem(1);   // add hp potiom
+        pickupItem(2);   // add hp potiom
+        pickupItem(1);   // add hp potiom
+        pickupItem(3);   // add hp potiom
         pickupItem(4);   // add hp potiom
+        pickupItem(3);   // add hp potiom
+        pickupItem(3);   // add hp potiom
+        pickupItem(3);   // add hp potiom
     }
   
     void pickupItem(int iID)
     {
         if(db.DATA_item[iID].stackable)
-            for( int i = 0 ; i < db.itemsList.Count; i++)
+            for( int i = 0 ; i < db.DATA_Inventory.Count; i++)
             {   
-                if(db.itemsList[i].itemID == iID)
-                    if(db.itemsList[i].itemAmmount <= db.itemsList[i].AmmountCap)
+                if(db.DATA_Inventory[i].itemID == iID)
+                    if(db.DATA_Inventory[i].itemAmmount < db.DATA_Inventory[i].AmmountCap)
                     {
-                        db.itemsList[i].itemAmmount++;
+                        db.DATA_Inventory[i].itemAmmount++;
                         updateSlot(i);
                         return;
                     }
             }
 
-        for( int i = 0 ; i < db.itemsList.Count; i++)
+        for( int i = 0 ; i < db.DATA_Inventory.Count; i++)
         {   
-            if(db.itemsList[i].itemID == 0)
+            if(db.DATA_Inventory[i].itemID == 0)
                 {
                     //if item is 0, it should have default values, that is, id, 1, 32(v0.6a)
-                    db.itemsList[i].itemID = iID;
+                    db.DATA_Inventory[i].itemID = iID;
                     updateSlot(i);
                     return;
                 } 
@@ -216,8 +227,8 @@ public class UI_Interface: MonoBehaviour
     {
         audioM.AudioAtPlayer(db.itemFromSlot(Slot).sound);
         //change id's
-        DATABASE.itemSlot itemToswitch = db.itemsList[Slot];
-        db.itemsList[Slot] = db.itemHand;
+        DATABASE.itemSlot itemToswitch = db.DATA_Inventory[Slot];
+        db.DATA_Inventory[Slot] = db.itemHand;
         db.itemHand = itemToswitch;
         updateSlot(Slot);
         ui_handImage.sprite = db.DATA_item[db.itemHand.itemID].icon;
@@ -237,12 +248,12 @@ public class UI_Interface: MonoBehaviour
 
         string ammount = "";
 
-        if (db.itemsList[Slot].itemID != 0)
+        if (db.DATA_Inventory[Slot].itemID != 0)
             {
                 if(db.itemFromSlot(Slot).stackable == false)
                     ammount = "~";
                 else
-                    ammount += "" + db.itemsList[Slot].itemAmmount;
+                    ammount += "" + db.DATA_Inventory[Slot].itemAmmount;
             }
         
         ui_inv.transform.GetChild(Slot).GetChild(1).GetComponent<TextMeshProUGUI>().text = ammount;
@@ -277,13 +288,15 @@ public class UI_Interface: MonoBehaviour
     void pickSlot(int Slot)
     {   
         audioM.AudioAtPlayer(AudioMenager.clips.ui_select);
+        audioM.AudioAtPlayer(db.itemFromSlot(Slot).sound);
         UI_Object.transform.GetChild(2).GetChild(currentSlotid).GetComponent<Image>().color = new Color32(75, 75, 75, 200);
         UI_Object.transform.GetChild(2).GetChild(Slot).GetComponent<Image>().color = new Color32(25, 200, 25, 200);
         currentSlotid = Slot;
         
         ////use item
-        db.useItem(db.itemsList[Slot]);
-        updateSlot(Slot);//we might have run out of item
+        db.selectItem(db.DATA_Inventory[Slot]);
+        //db.useItem(db.DATA_Inventory[Slot]);
+        //updateSlot(Slot);//we might have run out of item
 
     }
 
