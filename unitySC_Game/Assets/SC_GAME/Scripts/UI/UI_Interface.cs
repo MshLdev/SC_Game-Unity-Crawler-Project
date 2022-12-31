@@ -194,6 +194,8 @@ public class UI_Interface: MonoBehaviour
         pickupItem(3);   // add hp potiom
         pickupItem(3);   // add hp potiom
         pickupItem(3);   // add hp potiom
+        pickupItem(4);   // add hp potiom
+        pickupItem(4);   // add hp potiom
     }
   
     void pickupItem(int iID)
@@ -306,8 +308,8 @@ public class UI_Interface: MonoBehaviour
 
     public void updateBar(int barID, float value, float maxvalue)
     {
-        UI_Object.transform.GetChild(barID).GetChild(0).GetComponent<RectTransform>().localScale = new Vector3(value/maxvalue, 1f, 1f);  
-        UI_Object.transform.GetChild(barID).GetChild(1).GetComponent<TextMeshProUGUI>().text = $"{(int)value}/{(int)maxvalue}";
+        UI_Object.transform.GetChild(barID).GetChild(1).GetComponent<RectTransform>().localScale = new Vector3(value/maxvalue, 1f, 1f);  
+        UI_Object.transform.GetChild(barID).GetChild(2).GetComponent<TextMeshProUGUI>().text = $"{(int)value}/{(int)maxvalue}";
     }
 
 }

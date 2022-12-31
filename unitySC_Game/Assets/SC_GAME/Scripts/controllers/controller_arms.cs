@@ -24,13 +24,17 @@ public class controller_arms : MonoBehaviour
     //Reference for Animators
     Animator    hand_LEFT;
     Animator    hand_RIGHT;
+    
     //Transforms for Spawning Items
     Transform   wep_LEFT;
     Transform   Wep_RIGHT;
-    //References for the spawned Itmes(Needed?)
+
+    //References for the spawned Itmes(To delete them when necesarry)(MAYBE JUST DELETE ALL CHILDREN INSTEAD??)
     GameObject  pref_LEFT;
     GameObject  pref_RIGHT;
 
+    bool isHolding_LEFT;    //do we have consumable in hand??
+    bool isHolding_Right;   //Do we have weapon in hand??
     
     void Start()
     {
