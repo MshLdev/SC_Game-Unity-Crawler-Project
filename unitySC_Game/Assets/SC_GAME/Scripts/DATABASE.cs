@@ -11,7 +11,6 @@ public class DATABASE : MonoBehaviour
     public List<item>       DATA_item;              //Item Database, all items in the game are stored in this List
 
     public HeroDB           DATA_Hero;              //Player class
-
     ///DEPS??
     private controller_arms     armsCTRL;
 
@@ -64,7 +63,6 @@ public class DATABASE : MonoBehaviour
         {
             case itemType.POTION: 
             ///TEMPORARY AND DANGEROUSE!!!!!!!!
-            
                 armsCTRL.selectPotion(slot.itemID - 1);
                 break;
             default:
@@ -80,14 +78,17 @@ public class DATABASE : MonoBehaviour
             case 1: //HEALTH POTION
                 DATA_Hero.health.targetValue += 50;        ///Add + 50 regenration target
                 itemDecriment(slot);
+                armsCTRL.Select_drink();
                 break;
             case 2: //MANA POTION
                 DATA_Hero.mana.targetValue += 50;        ///Add + 50 regenration target
                 itemDecriment(slot);
+                armsCTRL.Select_drink();
                 break;
             case 3: //MILK POTION
                 DATA_Hero.health.targetValue -= 50;        ///Add + 50 regenration target
                 itemDecriment(slot);
+                armsCTRL.Select_drink();
                 break;
             default:
                 break;
@@ -96,10 +97,14 @@ public class DATABASE : MonoBehaviour
 
     public void itemDecriment(itemSlot slot)
     {
-          if(slot.itemAmmount == 1)                    ///if this was our last potion
-                slot.itemID = 0;
-            else
-                slot.itemAmmount --;
+        if(slot.itemAmmount == 1)                    ///if this was our last potion
+        {
+            armsCTRL.trigger_LastItem();            //set trigger in Animator
+            armsCTRL.Select_Null();
+            slot.itemID = 0;
+        }
+        else
+            slot.itemAmmount --;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////
