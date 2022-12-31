@@ -287,10 +287,20 @@ public class UI_Interface: MonoBehaviour
             if (int.TryParse(Input.inputString, out selector))
                 pickSlot(selector);
         }
+
+        ///Using Item
+        if(Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            db.useItem(db.DATA_Inventory[currentSlotid]);
+            updateSlot(currentSlotid);
+        }
     }
 
     void pickSlot(int Slot)
     {   
+        if(Slot == currentSlotid)
+            return;
+
         audioM.AudioAtPlayer(AudioMenager.clips.ui_select);
         audioM.AudioAtPlayer(db.itemFromSlot(Slot).sound);
         UI_Object.transform.GetChild(2).GetChild(currentSlotid).GetComponent<Image>().sprite = hotbar_Idle;

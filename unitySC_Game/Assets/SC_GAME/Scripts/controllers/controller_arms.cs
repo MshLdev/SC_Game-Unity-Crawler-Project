@@ -95,6 +95,16 @@ public class controller_arms : MonoBehaviour
     {
         if(pref_RIGHT)
             Destroy(pref_RIGHT);
-        hand_RIGHT.Play("Idle_Magic0");
+        hand_RIGHT.Play("Idle_Magic0", -1, 0);
+    }
+
+    public void Select_drink()
+    {
+        hand_RIGHT.Play("Use_Potion");
+    }
+
+    public void trigger_LastItem()
+    {
+        hand_RIGHT.SetTrigger("LastItem");
     }
 }
