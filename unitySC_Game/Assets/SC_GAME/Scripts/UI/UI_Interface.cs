@@ -18,6 +18,8 @@ public class UI_Interface: MonoBehaviour
     //hand Icon
     public Image ui_handImage;
     public Sprite crosshair;
+    public Sprite hotbar_Idle;
+    public Sprite hotbar_Active;
     //eq Size 
     public int numberOfX;
     public int numberOfY;
@@ -291,8 +293,8 @@ public class UI_Interface: MonoBehaviour
     {   
         audioM.AudioAtPlayer(AudioMenager.clips.ui_select);
         audioM.AudioAtPlayer(db.itemFromSlot(Slot).sound);
-        UI_Object.transform.GetChild(2).GetChild(currentSlotid).GetComponent<Image>().color = new Color32(75, 75, 75, 200);
-        UI_Object.transform.GetChild(2).GetChild(Slot).GetComponent<Image>().color = new Color32(25, 200, 25, 200);
+        UI_Object.transform.GetChild(2).GetChild(currentSlotid).GetComponent<Image>().sprite = hotbar_Idle;
+        UI_Object.transform.GetChild(2).GetChild(Slot).GetComponent<Image>().sprite = hotbar_Active;
         currentSlotid = Slot;
         
         ////use item
