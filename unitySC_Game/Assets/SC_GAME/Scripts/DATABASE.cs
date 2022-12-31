@@ -36,7 +36,7 @@ public class DATABASE : MonoBehaviour
     {
         
         DATA_item = new List<item>();
-        DATA_item.Add(new item(0, "", "", "icons/f", AudioMenager.clips.NONE, uniqueness.COMMON, itemType.NULL));
+        DATA_item.Add(new item(0, "", "", "GUI/Mini_frame1", AudioMenager.clips.NONE, uniqueness.COMMON, itemType.NULL));
         DATA_item.Add(new item(1, "Health Potion", "This magic drink made out of goblins blood and cave mushroom\n regenerates your health", "icons/hp", AudioMenager.clips.ui_splash, uniqueness.COMMON, itemType.POTION, stk: true));
         DATA_item.Add(new item(2, "Mana Potion", "This magic drink is an actual tears of swamp hornet", "icons/mp", AudioMenager.clips.ui_splash, uniqueness.UNCOMMON, itemType.POTION, stk: true));
         DATA_item.Add(new item(3, "Mleczny Człowiek's Drink", "This drink belongs to Mleczny Człowiek\n It stinks horribly and draws attention of near by rats", "icons/mcn", AudioMenager.clips.ui_splash, uniqueness.LEGENDARY, itemType.POTION, stk:true));
@@ -138,7 +138,7 @@ public class DATABASE : MonoBehaviour
             this.Id         = id;       
             this.Name       = name;
             this.Desc       = desc;
-            this.icon       = Resources.Load<Sprite>(iconsource);
+            this.icon   = Resources.Load<Sprite>(iconsource);
             this.stackable  = stk;
             this.sound      = s;
             this.rarity     = r;
