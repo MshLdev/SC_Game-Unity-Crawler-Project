@@ -11,6 +11,10 @@ public class DATABASE : MonoBehaviour
     public List<item>       DATA_item;              //Item Database, all items in the game are stored in this List
 
     public HeroDB           DATA_Hero;              //Player class
+
+    private float           cooldown_Potion = 4f;
+    private float           cooldown_Timer = 4f;
+
     ///DEPS??
     private controller_arms     armsCTRL;
 
@@ -20,6 +24,12 @@ public class DATABASE : MonoBehaviour
         initItems();
         initHands();
     }    
+
+    void Update()
+    {
+    cooldown_Timer += Time.deltaTime;
+    Debug.Log(cooldown_Timer);
+    }
 
     void initHands()
     {
@@ -76,6 +86,8 @@ public class DATABASE : MonoBehaviour
        switch(slot.itemID)
         {
             case 1: //HEALTH POTION
+                if(!isCool())
+                    break;
                 DATA_Hero.health.targetValue += 50;        ///Add + 50 regenration target
                 itemDecriment(slot);
                 armsCTRL.Select_drink();
@@ -105,6 +117,18 @@ public class DATABASE : MonoBehaviour
         }
         else
             slot.itemAmmount --;
+    }
+
+    private bool isCool()
+    {
+        if(cooldown_Timer >= cooldown_Potion)  
+        {
+            cooldown_Timer = 0;
+            return true;
+        }
+        else
+            return(cooldown_Timer >= cooldown_Potion);
+
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////
