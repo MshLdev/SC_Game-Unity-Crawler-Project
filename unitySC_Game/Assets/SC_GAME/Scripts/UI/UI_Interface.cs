@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 using static DATABASE.itemSlot;
+using UnityEngine.SceneManagement;
 
 
 ///SKRYPCIK EKWIPINKU
@@ -16,10 +17,12 @@ public class UI_Interface: MonoBehaviour
     //Slot Prefab
     public GameObject ui_invSlot;
     //hand Icon
+    public Animator hitmark;
     public Image ui_handImage;
     public Sprite crosshair;
     public Sprite hotbar_Idle;
     public Sprite hotbar_Active;
+    private Color crosshairColor = Color.cyan;
     //eq Size 
     public int numberOfX;
     public int numberOfY;
@@ -35,7 +38,7 @@ public class UI_Interface: MonoBehaviour
     public int currentSlotid = 0;
     public int currentSpellId = 0;
 
-    public  float           spellcost = -12.5f;
+    public  float           spellcost = -7.5f;
     public  GameObject[]    SpellBook;
     private GameObject      UI_Object;
     private GameObject      ui_inv;
@@ -45,7 +48,10 @@ public class UI_Interface: MonoBehaviour
     private AudioMenager        audioM;
     private DATABASE            db;
 
-    void Start()
+    //timers
+    float cooldown_hitmark = 0f;
+
+    public void Create()
     {
         ui_tooltip =    gameObject.GetComponent<UI_tooltip>();        //For UI elements to spawn
         audioM =        gameObject.GetComponent<AudioMenager>();      //for Audio
@@ -64,6 +70,7 @@ public class UI_Interface: MonoBehaviour
         InitSlots(numberOfX, numberOfY);
         //Switch On/Off
         switchInventory();
+        pickSlot(1);
     }
 
     void Update()
@@ -76,6 +83,9 @@ public class UI_Interface: MonoBehaviour
         inputHotbar();
         inputInventory();
         updateHand();
+        updateCrosshairColor();
+
+        cooldown_hitmark += Time.deltaTime;
     }
 
     void InitHotbarSlots()
@@ -117,7 +127,7 @@ public class UI_Interface: MonoBehaviour
                 ///Debug.Log("Initing slot id -> " + ((i*numY) + j+1));
 
                 //Why I did it as a child 3???? No idea....
-                GameObject newSlot = GameObject.Instantiate(ui_invSlot, Vector3.zero, Quaternion.identity, ui_inv.transform);
+                GameObject newSlot = GameObject.Instantiate(ui_invSlot, ui_inv.transform);
                 newSlot.GetComponent<RectTransform>().localPosition = slotStartPosition + new Vector3((slotSize+RowsMargin) * j, (slotSize+ColumnsMargin) * i * -1, 0);
                 newSlot.GetComponent<RectTransform>().sizeDelta = new Vector2(slotSize, slotSize);
                 //Also resize the Icon GameObject
@@ -154,8 +164,11 @@ public class UI_Interface: MonoBehaviour
         if(Input.GetKeyDown(KeyCode.I))
             switchInventory();
         
-        if(Input.GetKeyDown(KeyCode.Escape) && ui_inv.transform.parent.parent.gameObject.activeInHierarchy)
-            switchInventory();
+        if(Input.GetKeyDown(KeyCode.Escape))
+            if(ui_inv.transform.parent.parent.gameObject.activeInHierarchy)
+                switchInventory();
+            else
+                SceneManager.LoadScene("Main_Menu", LoadSceneMode.Single);
     }
 
     ///do refaktoru, kto to narzigoł w taki sposób, zagryza
@@ -165,14 +178,19 @@ public class UI_Interface: MonoBehaviour
         //using Parent so the background also goes offline(becouse I cant get Find() to work properly)
         ui_inv.transform.parent.parent.gameObject.SetActive(!ui_inv.transform.parent.parent.gameObject.activeSelf);
         
+        //Do if we are in UI mode
         if(Cursor.visible)
         {
+            ui_handImage.color = Color.white;
+            ui_handImage.sprite = db.DATA_item[db.itemHand.itemID].icon; //change the crosshair to item in hand(should be 'None' at this point o.0)
             Cursor.lockState = CursorLockMode.None;
             audioM.AudioAtPlayer(AudioMenager.clips.ui_close);
         }
-            
+        //Or else Do that    
         else
         {
+            ui_handImage.color = Color.cyan;
+            ui_handImage.sprite = crosshair; //change back to the crosshair
             Cursor.lockState = CursorLockMode.Locked; 
             audioM.AudioAtPlayer(AudioMenager.clips.ui_close);
         }
@@ -314,6 +332,28 @@ public class UI_Interface: MonoBehaviour
 
     }
 
+    void crosshairEnemy(bool isEnemy)
+    {
+        if(isEnemy)
+            crosshairColor = Color.red;
+        else
+            crosshairColor = Color.cyan;
+    }
+
+    void updateCrosshairColor()
+    {
+        ui_handImage.color = Color.Lerp(ui_handImage.color, crosshairColor, 10 * Time.deltaTime);
+    }
+
+    void hitMarkPlay(Color color)
+    {
+        if(cooldown_hitmark < 0.3f)
+            return;
+
+        cooldown_hitmark = 0f;
+        hitmark.Play("hitmark_hit");
+        audioM.AudioAtPlayer(AudioMenager.clips.ui_hitmark, 5f);
+    }
 
     ///////////////////////////////////////////////////
     //// HEALTH/MANA BARS
@@ -322,6 +362,24 @@ public class UI_Interface: MonoBehaviour
     {
         UI_Object.transform.GetChild(barID).GetChild(1).GetComponent<RectTransform>().localScale = new Vector3(value/maxvalue, 1f, 1f);  
         UI_Object.transform.GetChild(barID).GetChild(2).GetComponent<TextMeshProUGUI>().text = $"{(int)value}/{(int)maxvalue}";
+    }
+
+
+    ////////////////////////////
+    ////Events
+
+    private void OnEnable()
+    {
+        // Subscribe to the OnSomethingFound event
+        Enemy.MouseOnEnemy  += crosshairEnemy;
+        Enemy.EnemyHit      += hitMarkPlay;
+    }
+
+    private void OnDisable()
+    {
+        // Unsubscribe from the OnSomethingFound event
+        Enemy.MouseOnEnemy  -= crosshairEnemy;
+        Enemy.EnemyHit      -= hitMarkPlay;
     }
 
 }

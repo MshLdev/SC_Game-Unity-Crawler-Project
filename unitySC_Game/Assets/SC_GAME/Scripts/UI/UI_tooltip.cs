@@ -7,7 +7,7 @@ using TMPro;
 public class UI_tooltip : MonoBehaviour
 {
     Vector3 offset = new Vector3(0, -90, 0);
-    GameObject ui_tt;
+    public GameObject ui_tt;
 
     public Color32[] bgColors;
     public Color32[] txtColors;
@@ -16,9 +16,8 @@ public class UI_tooltip : MonoBehaviour
     private string Tdsc = "";
     private bool Tsimple = false;
 
-    void Awake()
+    public void Init()
     {
-        ui_tt = GameObject.Find("UI_Tooltip");
         ui_tt.SetActive(false); 
     }
 

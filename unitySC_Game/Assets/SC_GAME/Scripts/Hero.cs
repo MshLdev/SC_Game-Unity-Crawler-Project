@@ -7,12 +7,15 @@ public class Hero : MonoBehaviour
 {
     UI_Interface uiinterface;
     GameObject heroArms;
+    public GameObject castOrigin;
     DATABASE db;
+    controller_arms armsCTRL;
 
-    void Start()
+    public void Init()
     {
         uiinterface     = GameObject.Find("_GAME").GetComponent<UI_Interface>();
         db              = GameObject.Find("_GAME").GetComponent<DATABASE>();
+        armsCTRL        = GameObject.Find("ARMS").GetComponent<controller_arms>();
         InvokeRepeating("Regen", 0, 1.5f);
         
         //To access the Arms
@@ -45,12 +48,19 @@ public class Hero : MonoBehaviour
     ///cASTING iNTEGRATION
     void castSpell()
     {
+        //do we have enough mana??
         if(db.DATA_Hero.mana.targetValue < uiinterface.spellcost*-1)
             return;
 
         db.DATA_Hero.mana.Deal(uiinterface.spellcost);
-        GameObject SpellInstation = Instantiate(uiinterface.SpellBook[uiinterface.currentSpellId], Camera.main.transform.position + Camera.main.transform.forward, Quaternion.identity);
-        SpellInstation.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * 500f);
+        GameObject SpellInstation = Instantiate(uiinterface.SpellBook[uiinterface.currentSpellId], castOrigin.transform.position, Quaternion.identity);
+        SpellInstation.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * 1000);
+        armsCTRL.Attack();
+    }
+
+    void camRay()
+    {
+    
     }
 
 }

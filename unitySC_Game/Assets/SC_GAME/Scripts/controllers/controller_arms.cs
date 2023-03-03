@@ -36,7 +36,7 @@ public class controller_arms : MonoBehaviour
     bool isHolding_LEFT;    //do we have consumable in hand??
     bool isHolding_Right;   //Do we have weapon in hand??
     
-    void Start()
+    void Awake()
     {
         startingPosition = transform.localPosition;
 
@@ -106,5 +106,12 @@ public class controller_arms : MonoBehaviour
     public void trigger_LastItem()
     {
         hand_RIGHT.SetTrigger("LastItem");
+    }
+
+    public void Attack()
+    {
+        hand_LEFT.Play("Use_Magic0");
+        if(!pref_RIGHT)
+            hand_RIGHT.Play("Use_Magic0");
     }
 }

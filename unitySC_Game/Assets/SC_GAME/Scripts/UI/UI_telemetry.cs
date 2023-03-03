@@ -13,25 +13,29 @@ public class UI_telemetry : MonoBehaviour
     Text Tele_Text;
     GameObject Player_GO;
     GameObject Text_GO;
+    GameObject NAVdebug;
     float lastRefresh;
 
-
-
- 
     
-    public void Start()
+    public void Init()
     {
         Text_GO = GameObject.Find("UI_Telemetry");
         Player_GO = GameObject.Find("_PLAYER");
+        NAVdebug = GameObject.Find("_NAVMASK");
 
         Tele_Text = Text_GO.GetComponent<Text>();
         textUpdate();
+        teleSwitch();
+        NavSwitch(); //Inited before this script so therefore this is safe
     }
 
-    public void Update ()
+    void Update ()
     {
         if(Input.GetKeyDown("f1"))
-            textSwitch();
+        {
+            teleSwitch();
+            NavSwitch();
+        }
 
         if(lastRefresh >= TeleRefreshRate && Text_GO.activeSelf)
             textUpdate();
@@ -41,7 +45,7 @@ public class UI_telemetry : MonoBehaviour
 
 
 
-    public void textUpdate()
+    void textUpdate()
     {
             double usedVram = Profiler.GetAllocatedMemoryForGraphicsDriver()*0.000001;
             float current = 0;
@@ -65,8 +69,13 @@ public class UI_telemetry : MonoBehaviour
             lastRefresh = 0;
     }
 
-    public void textSwitch()
+    void teleSwitch()
     {
         Text_GO.SetActive(!Text_GO.activeSelf);
+    }
+
+    void NavSwitch()
+    {
+        NAVdebug.SetActive(!NAVdebug.activeSelf);
     }
 }

@@ -25,9 +25,10 @@ public class AudioMenager : MonoBehaviour
       ui_hover    = 7,
       ui_splash   = 8,
       ui_squish   = 9,
+      ui_hitmark  = 10,
     };
 
-    void Start() 
+    public void LoadResources() 
     {
       audioClips.Add(Resources.Load<AudioClip>("Audio/fireBurst"));
       audioClips.Add(Resources.Load<AudioClip>("Audio/fireCrack"));
@@ -39,9 +40,10 @@ public class AudioMenager : MonoBehaviour
       audioClips.Add(Resources.Load<AudioClip>("Audio/ui_hover"));
       audioClips.Add(Resources.Load<AudioClip>("Audio/ui_splash"));
       audioClips.Add(Resources.Load<AudioClip>("Audio/ui_squish"));
+      audioClips.Add(Resources.Load<AudioClip>("Audio/ui_hitmark"));
     }
 
-    public void AudioAtPosition(clips audioId, Vector3 position)
+    public void AudioAtPosition(clips audioId, Vector3 position, float vol = 1f)
     {
       if(audioId == clips.NONE)
         return;
@@ -49,6 +51,7 @@ public class AudioMenager : MonoBehaviour
        GameObject audioInstance = Instantiate(AudioPrefab, position, Quaternion.identity);
 
        audioInstance.GetComponent<AudioSource>().clip = audioClips[(int)audioId];
+       audioInstance.GetComponent<AudioSource>().volume = vol;
        audioInstance.GetComponent<AudioSource>().Play();
        Destroy(audioInstance, 5f);
     }
@@ -66,8 +69,9 @@ public class AudioMenager : MonoBehaviour
        Destroy(audioInstance, 5f);
     }
 
-    public void AudioAtPlayer(clips audioId)
+    public void AudioAtPlayer(clips audioId, float Volume = 1f)
     {
-      AudioAtPosition(audioId, player.transform.position);
+      AudioAtPosition(audioId, player.transform.position, Volume);
     }
+
 }

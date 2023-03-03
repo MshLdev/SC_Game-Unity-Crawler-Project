@@ -18,17 +18,19 @@ public class DATABASE : MonoBehaviour
     ///DEPS??
     private controller_arms     armsCTRL;
 
-    void Awake()
+    //////////////////////
+    public void LoadDB()
     {   
         initHero();
         initItems();
         initHands();
     }    
+    ///////////////////////
+
 
     void Update()
     {
     cooldown_Timer += Time.deltaTime;
-    Debug.Log(cooldown_Timer);
     }
 
     void initHands()
@@ -135,7 +137,7 @@ public class DATABASE : MonoBehaviour
     /////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+    //Slot class abstraction, just for make things easier
     public class itemSlot 
     {
         public int      itemID;         //id of item held by this slot
@@ -150,6 +152,7 @@ public class DATABASE : MonoBehaviour
         }
     }
 
+    //Item structure for Item Database
     public struct item 
     {
         
@@ -176,6 +179,7 @@ public class DATABASE : MonoBehaviour
     }
 
 
+    //All player data for future save/load
     public class HeroDB
     {
         public ushort level         = 1;
@@ -235,7 +239,7 @@ public class DATABASE : MonoBehaviour
         }
     }
 
-    //Finished structure, nothing to change now
+    //Finished structures, nothing to change now
     //simple enum for rarity
     public enum uniqueness
     {
@@ -245,6 +249,7 @@ public class DATABASE : MonoBehaviour
         LEGENDARY   = 3, 
     }
 
+    //Defines how we can use said item
     public enum itemType
     {
         NULL        = 0,
