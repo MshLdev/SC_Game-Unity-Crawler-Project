@@ -6,43 +6,34 @@ using UnityEngine;
 
 public class UI_telemetry : MonoBehaviour
 {
-    public float TeleRefreshRate = 0.6f;
-    public string Game_Version = "[SimpCrawler v0.5a(28.08.2022--14:31)] --> Alpha Build";
-    public int avgFrameRate;
+    public float     TeleRefreshRate     = 0.6f;
+    public string    Game_Version        = "[SimpCrawler v0.5a(28.08.2022--14:31)] --> Alpha Build";
+    private float    lastRefresh         = 0f;
+    private Vector3  PlayerLocation      = Vector3.zero;
     
-    Text Tele_Text;
-    GameObject Player_GO;
-    GameObject Text_GO;
-    GameObject NAVdebug;
-    float lastRefresh;
+    [SerializeField]private GameObject          telemetryTarget;
+    [SerializeField]private List<GameObject>    debugToSwitch;
 
-    
+   
     public void Init()
     {
-        Text_GO = GameObject.Find("UI_Telemetry");
-        Player_GO = GameObject.Find("_PLAYER");
-        NAVdebug = GameObject.Find("_NAVMASK");
-
-        Tele_Text = Text_GO.GetComponent<Text>();
         textUpdate();
         teleSwitch();
-        NavSwitch(); //Inited before this script so therefore this is safe
     }
+
 
     void Update ()
     {
         if(Input.GetKeyDown("f1"))
         {
             teleSwitch();
-            NavSwitch();
         }
 
-        if(lastRefresh >= TeleRefreshRate && Text_GO.activeSelf)
+        if(lastRefresh >= TeleRefreshRate && telemetryTarget.activeSelf)
             textUpdate();
         else
             lastRefresh += Time.deltaTime;
     }
-
 
 
     void textUpdate()
@@ -50,9 +41,8 @@ public class UI_telemetry : MonoBehaviour
             double usedVram = Profiler.GetAllocatedMemoryForGraphicsDriver()*0.000001;
             float current = 0;
             current = Time.frameCount / Time.time;
-            avgFrameRate = (int)current;
 
-            Tele_Text.text = 
+            telemetryTarget.GetComponent<Text>().text = 
                 Game_Version + "\n\n"
 
                 + $"[{SystemInfo.graphicsDeviceName}]\n"
@@ -61,21 +51,38 @@ public class UI_telemetry : MonoBehaviour
 
                 + $"[{Time.frameCount}] --> Frame\n"
                 + $"[{ (int)(Time.deltaTime * 1000f) }ms] --> FrameTime\n"
-                + $"[{avgFrameRate}] --> FramesPerSecond\n\n"
+                + $"[{(int)current}] --> FramesPerSecond\n\n"
 
-                + $"[x.{Player_GO.transform.position.x.ToString("F1")}, y.{Player_GO.transform.position.y.ToString("F1")}, z.{Player_GO.transform.position.z.ToString("F1")}]";
+                + $"[x.{PlayerLocation.x.ToString("F1")}, y.{PlayerLocation.y.ToString("F1")}, z.{PlayerLocation.z.ToString("F1")}]";
                 
-
-            lastRefresh = 0;
+            lastRefresh = 0f;
     }
 
     void teleSwitch()
     {
-        Text_GO.SetActive(!Text_GO.activeSelf);
+        telemetryTarget.SetActive(!telemetryTarget.activeSelf);
+        foreach (GameObject toSwitch in debugToSwitch)
+            toSwitch.SetActive(!toSwitch.activeSelf);
+        
     }
 
-    void NavSwitch()
+        void updateLocation(Vector3 position)
     {
-        NAVdebug.SetActive(!NAVdebug.activeSelf);
+        PlayerLocation = position;
+    }
+
+
+    ////////////////////////////
+    ////Events
+    private void OnEnable()
+    {
+        // Subscribe to the OnSomethingFound event
+        controller_player.PlayerLocation += updateLocation;
+    }
+
+    private void OnDisable()
+    {
+        // Unsubscribe from the OnSomethingFound event
+        controller_player.PlayerLocation -= updateLocation;
     }
 }

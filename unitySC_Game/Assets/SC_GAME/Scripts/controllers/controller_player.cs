@@ -2,29 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(CharacterController))]
 
+
+[RequireComponent(typeof(CharacterController))]
 public class controller_player : MonoBehaviour
 {
-    public float walkingSpeed       = 7.5f;
-    public float runningSpeed       = 11.5f;
-    public float crouchingSpeed     = 3.5f;
+    public float speedWalk          = 7.5f;         //how fast we walk
+    public float speedRun           = 11.5f;        //how fast we run
+    public float speedCrouch        = 3.5f;         //how fast we walk wile crouched
+    public float speedJump          = 8.0f;         //how strong is the jump
+    public float speedCam           = 2.0f;         //how fast is the camera
 
-    public float jumpSpeed          = 8.0f;
-    public float gravity            = 20.0f;
-    public float lookSpeed          = 2.0f;
-    public float lookXLimit         = 45.0f;
+    public float gravity           = 20.0f;         //how strong is the gravity for the player
+    public float camXlimit         = 45.0f;         //how for can the camera move in the X-Axis
+    private float rotationX        = 0;             //Hands rotation in X-Axis (sway movement)
+    private Vector3 moveDirection  = Vector3.zero;  //Vector used to store the Player movement Vector
 
-    CharacterController characterController;
-    public Camera playerCamera;
+    [SerializeField]
+    private CharacterController characterController;//yes
 
-    Vector3 moveDirection = Vector3.zero;
-    float rotationX = 0;
+    ///Scripts Dependencies------------------
+    ///
+    /// - NONE
 
-    void Start()
-    {
-        characterController = GetComponent<CharacterController>();
-    }
+    ///Events -------------------------------
+    //
+    private float LocationTimer   = 0.3f;                     //How Often we Update Players Location
+    private float locationClock         = 0f;                       //Actual Timer
+    public static event System.Action<Vector3>  PlayerLocation;     //Player Location Update Event
 
     void Update()
     {
@@ -34,6 +39,7 @@ public class controller_player : MonoBehaviour
         movement();
         rotation();
     }
+
 
 
     void movement()
@@ -48,7 +54,7 @@ public class controller_player : MonoBehaviour
 
         //Consider Jumping
         if (Input.GetButton("Jump")  && characterController.isGrounded)
-            moveDirection.y = jumpSpeed;
+            moveDirection.y = speedJump;
         //nie rozumim tej linijki
         else
             moveDirection.y = movementDirectionY;
@@ -60,26 +66,39 @@ public class controller_player : MonoBehaviour
 
         // Move the controller
         characterController.Move(moveDirection * Time.deltaTime);
+        locationEvent();
     }
     
 
     void rotation()
     {
-        rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
-        rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
-        playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
-        transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
+        rotationX += -Input.GetAxis("Mouse Y") * speedCam * Time.deltaTime * 100f;
+        rotationX = Mathf.Clamp(rotationX, -camXlimit, camXlimit);
+        Camera.main.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
+        transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * speedCam, 0);
     }
+
 
     float checkSpeed()
     {
         if (Input.GetKey(KeyCode.LeftShift))    
-            return runningSpeed;
+            return speedRun;
 
         if (Input.GetKey(KeyCode.LeftControl))   
-            return crouchingSpeed;
+            return speedCrouch;
 
         else
-            return walkingSpeed;
+            return speedWalk;
+    }
+
+    void locationEvent()
+    {
+        locationClock += Time.deltaTime;
+        if(locationClock >= LocationTimer)
+            {
+                locationClock = 0f;
+                if(PlayerLocation != null)
+                    PlayerLocation?.Invoke(transform.position - new Vector3(0f, 0.4f, 0f));
+            }
     }
 }

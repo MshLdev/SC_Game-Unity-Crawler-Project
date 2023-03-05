@@ -26,6 +26,7 @@ public class AudioMenager : MonoBehaviour
       ui_splash   = 8,
       ui_squish   = 9,
       ui_hitmark  = 10,
+      Score       = 11,
     };
 
     public void LoadResources() 
@@ -41,6 +42,7 @@ public class AudioMenager : MonoBehaviour
       audioClips.Add(Resources.Load<AudioClip>("Audio/ui_splash"));
       audioClips.Add(Resources.Load<AudioClip>("Audio/ui_squish"));
       audioClips.Add(Resources.Load<AudioClip>("Audio/ui_hitmark"));
+      audioClips.Add(Resources.Load<AudioClip>("Audio/Score"));
     }
 
     public void AudioAtPosition(clips audioId, Vector3 position, float vol = 1f)

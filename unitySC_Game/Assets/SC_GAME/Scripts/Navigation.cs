@@ -17,9 +17,13 @@ public class Navigation : MonoBehaviour
 
     private List<navPoint>  navPoints;
     private GameObject      NavParent;
-    private int             PlayerPoint;
 
+    //For Agents to Navigate
+    public Vector3         PlayerLocation = Vector3.zero;
+    public Vector3         PlayerPoint  = Vector3.zero;
     
+
+
     public void CreateNavMap()
     {
         navPoints = new List<navPoint>();
@@ -69,6 +73,8 @@ public class Navigation : MonoBehaviour
         }
     }
 
+
+
     public Vector3 getClosestPoint(Vector3 position)
     {
         float closestDistance    = float.MaxValue;
@@ -90,6 +96,33 @@ public class Navigation : MonoBehaviour
         else
             return position; 
     }
+
+
+
+    void updateLocation(Vector3 position)
+    {
+        PlayerLocation = position;
+        PlayerPoint = getClosestPoint(position);
+
+        NavParent.GetComponent<LineRenderer>().SetPositions(new Vector3[] {PlayerLocation, PlayerPoint});
+    }
+
+
+
+    ////////////////////////////
+    ////Events
+    private void OnEnable()
+    {
+        // Subscribe to the OnSomethingFound event
+        controller_player.PlayerLocation += updateLocation;
+    }
+    private void OnDisable()
+    {
+        // Unsubscribe from the OnSomethingFound event
+        controller_player.PlayerLocation -= updateLocation;
+    }
+    //////////-Events
+    /////////////////////////
 }
 
 

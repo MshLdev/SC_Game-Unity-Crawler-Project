@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3355428215058825598}
   - component: {fileID: 37314268292391033}
+  - component: {fileID: 3511390570151517064}
   m_Layer: 0
   m_Name: Env_Torch
   m_TagString: Untagged
@@ -45,9 +46,9 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 6aa38f87cf6fa9c419a94012a4311626, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 0.18
-  m_Pitch: 0.7
+  m_Pitch: 1.14
   Loop: 1
   Mute: 0
   Spatialize: 0
@@ -55,9 +56,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 20
   Pan2D: 0
-  rolloffMode: 1
+  rolloffMode: 0
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -90,7 +91,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -130,6 +131,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &3511390570151517064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2727827340940270532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 458d7afd608a1a443b2ab811e75bb608, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6365551529590825757
 GameObject:
   m_ObjectHideFlags: 0

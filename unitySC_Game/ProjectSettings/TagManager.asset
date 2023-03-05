@@ -11,11 +11,12 @@ TagManager:
   - Navpoint
   - World
   - _GAME
+  - Actor
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Actor
   - Water
   - UI
   - Arms
