@@ -54,7 +54,7 @@ public class Hero : MonoBehaviour
 
         db.DATA_Hero.mana.Deal(uiinterface.spellcost);
         GameObject SpellInstation = Instantiate(uiinterface.SpellBook[uiinterface.currentSpellId], castOrigin.transform.position, Quaternion.identity);
-        SpellInstation.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * 1000);
+        SpellInstation.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * 1500);
         armsCTRL.Attack();
     }
 
