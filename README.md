@@ -1,6 +1,18 @@
 # SC_Game Project
-Projekt gierki typu dungeon crawler, został napisany w około 5%, na dzien dzisiejszy mamy tutaj działający system eq, menadzer scen, generator sciezek dla pathfindingu, zalążki AI przeciwników   
-oraz kilka drobnych elementów w samym silniku takie jak ragdolle, efekty cząsteczkowe itp..
+Game project inspired by oldschool dungeon crawlers, it was approximately 5 percent written as of today.
+The list of features is quite modest:
+- Inventory system
+- Scene menager
+- Audio support
+- Pathing Generator
+- basic AI
+- Shooter based combat
+- ragdolls
+- particles
+- UI animations
+- some basic world interactions
+  
 
-# Historia
-Projekt został przeniesiony z silnika Flax przez brak wsparcia dla wielu funkcji związanych z obsługą dźwięku a także przez wiele bugów w ich implementacji, na dzień dzisiejszy wiele z nich zostało poprawionych.
+# History
+Project was originally written in Flax Game engine but back in a day Flax had alot of problems with Audio, it was very bugged and offered extremley minimal options.
+It was supposed to be Short story driven shooter/crawler targeted towards Hardcodre players/speedrunners
